@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cindy Cicalese"
+		]
+	},
+	"phabtaskgraph": "The name of the extension's entry in Special:SpecialPages",
+	"phabtaskgraph-desc": "{{desc|name=PhabTaskGraph|url=https://www.mediawiki.org/wiki/Extension:PhabTaskGraph}}",
+	"phabtaskgraph-author-field-label": "Field label",
+	"phabtaskgraph-owner-field-label": "Field label",
+	"phabtaskgraph-tasks-field-label": "Field label",
+	"phabtaskgraph-projects-field-label": "Field label",
+	"phabtaskgraph-status-field-label": "Field label",
+	"phabtaskgraph-width-field-label": "Field label",
+	"phabtaskgraph--height-field-label": "Field label",
+	"phabtaskgraph-tasks-field-help": "Field help",
+	"phabtaskgraph-projects-field-help": "Field help",
+	"phabtaskgraph-width-field-help": "Field help",
+	"phabtaskgraph--height-field-help": "Field help",
+	"phabtaskgraph-status-open": "Phabricator status value",
+	"phabtaskgraph-status-stalled": "Phabricator status value",
+	"phabtaskgraph-status-resolved": "Phabricator status value",
+	"phabtaskgraph-status-invalid": "Phabricator status value",
+	"phabtaskgraph-status-declined": "Phabricator status value",
+	"phabtaskgraph-status-duplicate": "Phabricator status value"
+}

@@ -1,0 +1,50 @@
+{
+	"name": "PhabTaskGraph",
+	"version": "1.0",
+	"author": [
+		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:PhabTaskGraph",
+	"descriptionmsg": "phabtaskgraph-desc",
+	"license-name": "GPL-2.0+",
+	"type": "other",
+	"AutoloadClasses": {
+		"SpecialPhabTaskGraph": "includes/SpecialPhabTaskGraph.php"
+	},
+	"SpecialPages": {
+		"PhabTaskGraph": "SpecialPhabTaskGraph"
+	},
+	"MessagesDirs": {
+		"PhabTaskGraph": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"PhabTaskGraphAlias": "i18n/PhabTaskGraph.i18n.alias.php"
+	},
+	"ResourceModules": {
+		"ext.PhabTaskGraph": {
+			"styles": [
+				"PhabTaskGraph.css"
+			],
+			"scripts": [
+				"d3.v3.min.js",
+				"PhabTaskGraph.js"
+			],
+			"messages": [
+				"phabtaskgraph-author-field-label",
+				"phabtaskgraph-owner-field-label"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "PhabTaskGraph/resources"
+	},
+	"config": {
+		"PhabTaskGraphPhabURL": "https://phabricator.wikimedia.org",
+		"PhabTaskGraphPhabLibPath": "/usr/share/libphutil/src",
+		"PhabTaskGraphConduitAPIToken": null
+	},
+	"manifest_version": 1
+}
