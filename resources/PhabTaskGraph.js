@@ -146,13 +146,15 @@
 					}
 				});
 
-			var stop_tooltip = false;
-			var stop_drag = false;
+			var dragging = false;
+			var paused = false;
 
 			node
 				.on('mouseover', function (d) {
-					stop_tooltip = true;
-					force.stop();
+					if (force.alpha()) {
+						force.stop();
+						paused = true;
+					}
 					tooltip
 						.transition()
 						.duration(200)
@@ -165,9 +167,9 @@
 
 			node
 				.on('mouseout', function (d) {
-					stop_tooltip = false;
-					if (!stop_drag) {
+					if (!dragging && paused) {
 						force.resume();
+						paused = false;
 					}
 					tooltip
 						.transition()
@@ -182,8 +184,11 @@
 			drag
 				.on('dragstart', function (d) {
 					d3.event.sourceEvent.stopPropagation();
-					stop_drag = true;
-					force.stop();
+					dragging = true;
+					if (force.alpha()) {
+						force.stop();
+						paused = true;
+					}
 				});
 
 			drag
@@ -201,10 +206,9 @@
 						d.fixed = !d.fixed;
 					}
 					tick();
-					stop_drag = false;
-					if (!stop_tooltip) {
-						force.resume();
-					}
+					dragging = false;
+					force.resume();
+					paused = false;
 				});
 
 			node
