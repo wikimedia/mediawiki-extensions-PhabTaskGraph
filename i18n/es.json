@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"Macofe"
+		]
+	},
+	"phabtaskgraph": "Gráfico de tareas de Phabricator",
+	"phabtaskgraph-desc": "Visualiza las relaciones de las tareas en Phabricator mediante un grafo dirigido",
+	"phabtaskgraph-author-field-label": "Autor",
+	"phabtaskgraph-owner-field-label": "Propietario",
+	"phabtaskgraph-tasks-field-label": "Tareas",
+	"phabtaskgraph-projects-field-label": "Proyectos",
+	"phabtaskgraph-status-field-label": "Estado",
+	"phabtaskgraph-width-field-label": "Anchura",
+	"phabtaskgraph-height-field-label": "Altura",
+	"phabtaskgraph-tasks-field-help": "lista de identificadores de tareas separados por comas (la \"T\" es opcional); p. ej. T123456",
+	"phabtaskgraph-projects-field-help": "lista de nombres de proyectos separados por comas; p. ej. MediaWiki-Platform-Team",
+	"phabtaskgraph-width-field-help": "predeterminado: 800",
+	"phabtaskgraph-height-field-help": "predeterminado: 800",
+	"phabtaskgraph-status-open": "Abierto",
+	"phabtaskgraph-status-stalled": "Detenido",
+	"phabtaskgraph-status-resolved": "Resuelto",
+	"phabtaskgraph-status-invalid": "No válido",
+	"phabtaskgraph-status-declined": "Descartado",
+	"phabtaskgraph-status-duplicate": "Duplicado"
+}

@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Robby"
+		]
+	},
+	"phabtaskgraph-author-field-label": "Auteur",
+	"phabtaskgraph-owner-field-label": "Besëtzer",
+	"phabtaskgraph-tasks-field-label": "Aufgaben",
+	"phabtaskgraph-projects-field-label": "Projeten",
+	"phabtaskgraph-status-resolved": "Geléist",
+	"phabtaskgraph-status-invalid": "Net valabel"
+}

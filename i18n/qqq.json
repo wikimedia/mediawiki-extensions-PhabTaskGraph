@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Cindy Cicalese",
-			"Umherirrender"
+			"Umherirrender",
+			"Robby"
 		]
 	},
 	"phabtaskgraph": "The name of the extension's entry in Special:SpecialPages",
@@ -10,7 +11,7 @@
 	"phabtaskgraph-author-field-label": "Field label",
 	"phabtaskgraph-owner-field-label": "Field label",
 	"phabtaskgraph-tasks-field-label": "Field label",
-	"phabtaskgraph-projects-field-label": "Field label",
+	"phabtaskgraph-projects-field-label": "Field label\n{{Identical|Project}}",
 	"phabtaskgraph-status-field-label": "Field label",
 	"phabtaskgraph-width-field-label": "Field label",
 	"phabtaskgraph-height-field-label": "Field label",

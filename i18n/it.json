@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Beta16"
+		]
+	},
+	"phabtaskgraph-author-field-label": "Autore",
+	"phabtaskgraph-owner-field-label": "Proprietario",
+	"phabtaskgraph-tasks-field-label": "Attività",
+	"phabtaskgraph-projects-field-label": "Progetti",
+	"phabtaskgraph-status-field-label": "Stato",
+	"phabtaskgraph-width-field-label": "Larghezza",
+	"phabtaskgraph-height-field-label": "Altezza",
+	"phabtaskgraph-status-open": "Aperto",
+	"phabtaskgraph-status-resolved": "Risolto",
+	"phabtaskgraph-status-invalid": "Non valido",
+	"phabtaskgraph-status-duplicate": "Duplicato"
+}
