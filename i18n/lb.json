@@ -8,6 +8,10 @@
 	"phabtaskgraph-owner-field-label": "Besëtzer",
 	"phabtaskgraph-tasks-field-label": "Aufgaben",
 	"phabtaskgraph-projects-field-label": "Projeten",
+	"phabtaskgraph-status-field-label": "Status",
+	"phabtaskgraph-width-field-label": "Breet",
+	"phabtaskgraph-height-field-label": "Héicht",
+	"phabtaskgraph-status-open": "Opmaachen",
 	"phabtaskgraph-status-resolved": "Geléist",
 	"phabtaskgraph-status-invalid": "Net valabel"
 }
