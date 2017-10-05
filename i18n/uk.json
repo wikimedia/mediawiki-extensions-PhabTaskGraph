@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"SimondR"
+		]
+	},
+	"phabtaskgraph-author-field-label": "Автор",
+	"phabtaskgraph-owner-field-label": "Власник",
+	"phabtaskgraph-tasks-field-label": "Завдання",
+	"phabtaskgraph-projects-field-label": "Проекти",
+	"phabtaskgraph-status-field-label": "Статус",
+	"phabtaskgraph-width-field-label": "Ширина",
+	"phabtaskgraph-height-field-label": "Висота",
+	"phabtaskgraph-status-resolved": "Вирішено",
+	"phabtaskgraph-status-invalid": "Недійсний",
+	"phabtaskgraph-status-declined": "Відхилили"
+}
