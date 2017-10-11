@@ -25,5 +25,5 @@
 	"phabtaskgraph-status-resolved": "Phabricator status value",
 	"phabtaskgraph-status-invalid": "Phabricator status value",
 	"phabtaskgraph-status-declined": "Phabricator status value",
-	"phabtaskgraph-status-duplicate": "Phabricator status value"
+	"phabtaskgraph-status-duplicate": "Phabricator status value\n{{Identical|Duplicate}}"
 }

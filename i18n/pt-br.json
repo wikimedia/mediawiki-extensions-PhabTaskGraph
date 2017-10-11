@@ -1,0 +1,22 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eduardo Addad de Oliveira"
+		]
+	},
+	"phabtaskgraph": "Gráfico de tarefas Phabricator",
+	"phabtaskgraph-author-field-label": "Autor",
+	"phabtaskgraph-owner-field-label": "Proprietário",
+	"phabtaskgraph-tasks-field-label": "Tarefas",
+	"phabtaskgraph-projects-field-label": "Projetos",
+	"phabtaskgraph-status-field-label": "Status",
+	"phabtaskgraph-width-field-label": "Largura",
+	"phabtaskgraph-height-field-label": "Altura",
+	"phabtaskgraph-height-field-help": "predefinido: 800",
+	"phabtaskgraph-status-open": "Abrir",
+	"phabtaskgraph-status-stalled": "Parada",
+	"phabtaskgraph-status-resolved": "Resolvido",
+	"phabtaskgraph-status-invalid": "Inválido",
+	"phabtaskgraph-status-declined": "Discordo",
+	"phabtaskgraph-status-duplicate": "Duplicado"
+}

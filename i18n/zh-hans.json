@@ -7,7 +7,7 @@
 	"phabtaskgraph": "Phabricator任务图表",
 	"phabtaskgraph-desc": "使用力导向图直观显示phabricator任务的关系",
 	"phabtaskgraph-author-field-label": "作者",
-	"phabtaskgraph-owner-field-label": "所有人",
+	"phabtaskgraph-owner-field-label": "所有者",
 	"phabtaskgraph-tasks-field-label": "任务",
 	"phabtaskgraph-projects-field-label": "项目",
 	"phabtaskgraph-status-field-label": "状态",
