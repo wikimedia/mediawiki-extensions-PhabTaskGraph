@@ -4,5 +4,8 @@
 			"Papuass"
 		]
 	},
+	"phabtaskgraph-author-field-label": "Autors",
+	"phabtaskgraph-owner-field-label": "Īpašnieks",
+	"phabtaskgraph-tasks-field-label": "Uzdevumi",
 	"phabtaskgraph-status-field-label": "Statuss"
 }
