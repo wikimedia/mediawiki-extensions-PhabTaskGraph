@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kareyac"
+		]
+	},
+	"phabtaskgraph-author-field-label": "Автор",
+	"phabtaskgraph-owner-field-label": "Владелец",
+	"phabtaskgraph-status-field-label": "Состояние",
+	"phabtaskgraph-width-field-label": "Ширина",
+	"phabtaskgraph-height-field-label": "Высота"
+}
