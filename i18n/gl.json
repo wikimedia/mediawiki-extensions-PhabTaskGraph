@@ -1,0 +1,20 @@
+{
+	"@metadata": {
+		"authors": [
+			"Elisardojm"
+		]
+	},
+	"phabtaskgraph-author-field-label": "Autor",
+	"phabtaskgraph-owner-field-label": "Propietario",
+	"phabtaskgraph-tasks-field-label": "Tarefas",
+	"phabtaskgraph-projects-field-label": "Proxectos",
+	"phabtaskgraph-status-field-label": "Estado",
+	"phabtaskgraph-width-field-label": "Ancho",
+	"phabtaskgraph-height-field-label": "Alto",
+	"phabtaskgraph-status-open": "Aberta",
+	"phabtaskgraph-status-stalled": "Parada",
+	"phabtaskgraph-status-resolved": "Resolta",
+	"phabtaskgraph-status-invalid": "Non válida",
+	"phabtaskgraph-status-declined": "Rexeitada",
+	"phabtaskgraph-status-duplicate": "Duplicada"
+}
