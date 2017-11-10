@@ -11,6 +11,8 @@
 	"phabtaskgraph-status-field-label": "Estado",
 	"phabtaskgraph-width-field-label": "Ancho",
 	"phabtaskgraph-height-field-label": "Alto",
+	"phabtaskgraph-width-field-help": "predefinido: 800",
+	"phabtaskgraph-height-field-help": "predefinido: 800",
 	"phabtaskgraph-status-open": "Aberta",
 	"phabtaskgraph-status-stalled": "Parada",
 	"phabtaskgraph-status-resolved": "Resolta",
