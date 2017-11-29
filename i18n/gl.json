@@ -1,9 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Elisardojm"
+			"Elisardojm",
+			"Banjo"
 		]
 	},
+	"phabtaskgraph": "Gráfico de tarefas de Phabricator",
 	"phabtaskgraph-author-field-label": "Autor",
 	"phabtaskgraph-owner-field-label": "Propietario",
 	"phabtaskgraph-tasks-field-label": "Tarefas",
