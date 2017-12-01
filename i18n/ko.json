@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ykhwong"
+			"Ykhwong",
+			"Revi"
 		]
 	},
 	"phabtaskgraph": "파브리케이터 작업 그래프",
@@ -13,7 +14,7 @@
 	"phabtaskgraph-width-field-label": "너비",
 	"phabtaskgraph-height-field-label": "높이",
 	"phabtaskgraph-tasks-field-help": "작업의 쉼표 구분 목록 (\"T\"로 시작하는 것은 선택사항, 예: 'T123456, T654321')",
-	"phabtaskgraph-projects-field-help": "프로젝트 이름의 쉼표 구분 목록 (예: 미디어위키-플랫폼-팀)",
+	"phabtaskgraph-projects-field-help": "프로젝트 이름의 쉼표 구분 목록 (예: 미디어위키-플랫폼-팀, 에픽)",
 	"phabtaskgraph-width-field-help": "기본값: 800",
 	"phabtaskgraph-height-field-help": "기본값: 800",
 	"phabtaskgraph-status-open": "열림",
