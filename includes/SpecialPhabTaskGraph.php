@@ -36,8 +36,11 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 		}
 
 		$statusarray = $request->getArray( 'status' );
-		if ( $statusarray == [] ) {
+		$size = count( $statusarray );
+		if ( $size === 0 ) {
 			$statusarray = [ 'open', 'stalled' ];
+		} elseif ( $size === 1 ) {
+			$statusarray = array_map( 'trim', explode( ',' , $statusarray[0] ) );
 		}
 
 		$tasks = $request->getText( 'tasks' );
