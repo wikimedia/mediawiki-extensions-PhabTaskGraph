@@ -5,5 +5,6 @@
 		]
 	},
 	"phabtaskgraph-author-field-label": "作者",
-	"phabtaskgraph-owner-field-label": "擁有者"
+	"phabtaskgraph-owner-field-label": "擁有者",
+	"phabtaskgraph-status-duplicate": "重複"
 }
