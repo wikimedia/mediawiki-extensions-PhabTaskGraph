@@ -17,13 +17,13 @@
 	"phabtaskgraph-width-field-label": "Field label\n{{Identical|Width}}",
 	"phabtaskgraph-height-field-label": "Field label\n{{Identical|Height}}",
 	"phabtaskgraph-tasks-field-help": "Field help",
-	"phabtaskgraph-projects-field-help": "Field help",
+	"phabtaskgraph-projects-field-help": "{{doc-important|Do not translate 'MediaWiki-Platform-Team, Epic', this also applies to the comma used here, as such format is required in the actual Phabricator project maintenance works.}}\nField help, feel free to use other kinds of quotation marks.",
 	"phabtaskgraph-width-field-help": "Field help",
 	"phabtaskgraph-height-field-help": "Field help",
 	"phabtaskgraph-status-open": "Phabricator status value\n{{Identical|Open}}",
 	"phabtaskgraph-status-stalled": "Phabricator status value\n{{Identical|Stalled}}",
 	"phabtaskgraph-status-resolved": "Phabricator status value",
-	"phabtaskgraph-status-invalid": "Phabricator status value",
+	"phabtaskgraph-status-invalid": "Phabricator status value\n{{Identical|Invalid}}",
 	"phabtaskgraph-status-declined": "Phabricator status value",
 	"phabtaskgraph-status-duplicate": "Phabricator status value\n{{Identical|Duplicate}}"
 }
