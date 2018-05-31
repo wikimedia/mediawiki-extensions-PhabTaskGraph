@@ -41,8 +41,9 @@ require_once ( "$IP/maintenance/Maintenance.php" );
  */
 class ImportPhabData extends Maintenance {
 	private $client = null;
+	private $dry_run = false;
 	private $verbose = false;
-	private $save = false;
+	private $save_info = false;
 	private $phabTasks = [];
 	private $projects = [];
 	private $users = [];
@@ -76,6 +77,7 @@ class ImportPhabData extends Maintenance {
 	 * @inheritDoc
 	 */
 	public function execute() {
+		$this->dry_run = $this->getOption( 'dry-run' );
 		$this->verbose = $this->getOption( 'verbose' );
 		$this->save_info = $this->getOption( 'save-info' );
 
@@ -118,7 +120,7 @@ class ImportPhabData extends Maintenance {
 			}
 		}
 
-		if ( !$this->getOption( 'dry-run' ) ) {
+		if ( !$this->dry_run ) {
 			foreach ( $wikiTasks as $taskID => $title ) {
 				$formattedTask = $this->formatTask( $taskID,
 					$this->phabTasks[$taskID], $taskTemplateName, $projectTemplateName,
@@ -127,9 +129,11 @@ class ImportPhabData extends Maintenance {
 			}
 		}
 
-		if ( $this->verbose || $this->save_info ) {
-			$info = 'Wiki task count: ' . count( $wikiTasks ) . PHP_EOL . PHP_EOL;
-			$info .= 'Phabricator task count: ' . count( $this->phabTasks ) .
+		if ( $this->verbose || ( $this->save_info && !$this->dry_run ) ) {
+			$info = 'Count of wiki pages in category ' . $categoryName . ': ' .
+				count( $wikiTasks ) . PHP_EOL . PHP_EOL;
+			$info .= 'Count of Phabricator tasks in project ' . $projectName .
+				' and all subtasks: ' . count( $this->phabTasks ) .
 				PHP_EOL . PHP_EOL;
 			$info .= 'Open Phabricator tasks in project ' . $projectName .
 				' that do not have wiki pages:' . PHP_EOL;
@@ -144,7 +148,7 @@ class ImportPhabData extends Maintenance {
 				echo PHP_EOL . $info;
 			}
 
-			if ( $this->save_info ) {
+			if ( $this->save_info && !$this->dry_run ) {
 				$title = Title::newFromText( $this->save_info );
 				if ( $title ) {
 					$wikiPage = new WikiPage( $title );
