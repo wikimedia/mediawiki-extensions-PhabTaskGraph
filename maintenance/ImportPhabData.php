@@ -44,6 +44,7 @@ class ImportPhabData extends Maintenance {
 	private $dry_run = false;
 	private $verbose = false;
 	private $save_info = false;
+	private $delay = false;
 	private $phabTasks = [];
 	private $projects = [];
 	private $users = [];
@@ -70,6 +71,8 @@ class ImportPhabData extends Maintenance {
 			false, false, 'v' );
 		$this->addOption( "save-info", "Save import information to wiki page",
 			false, true, 's' );
+		$this->addOption( "delay", "Delay in seconds before each Conduit API call (default: 0)",
+			false, true, 'd' );
 		$this->requireExtension( 'PhabTaskGraph' );
 	}
 
@@ -80,6 +83,7 @@ class ImportPhabData extends Maintenance {
 		$this->dry_run = $this->getOption( 'dry-run' );
 		$this->verbose = $this->getOption( 'verbose' );
 		$this->save_info = $this->getOption( 'save-info' );
+		$this->delay = intval( $this->getOption( 'delay', 0 ) );
 
 		$projectName = $this->getArg( 0 );
 		$categoryName = $this->getArg( 1, 'Phabricator Tasks' );
@@ -164,11 +168,36 @@ class ImportPhabData extends Maintenance {
 		}
 	}
 
+	private function callAPI( $api, $params ) {
+		$after = null;
+		$allData = [];
+		do {
+			if ( $this->delay > 0 ) {
+				sleep( $this->delay );
+			}
+			if ( is_null( $after ) ) {
+				$p = $params;
+			} else {
+				$a = [
+					"after" => $after
+				];
+				$p = $params + $a;
+			}
+			$results = $this->client->callMethodSynchronous( $api, $p );
+			$resultData = $results['data'];
+			foreach ( $resultData as $data ) {
+				$allData[] = $data;
+			}
+			$after = $results['cursor']['after'];
+		} while ( !is_null( $after ) );
+		return $allData;
+	}
+
 	private function getPhabricatorTasksFromProject( $projectName ) {
 		$params = [
 			'constraints' => [
 				'projects' => [
-					$projectName,
+					$projectName
 				],
 			],
 			'attachments' => [
@@ -180,9 +209,11 @@ class ImportPhabData extends Maintenance {
 				]
 			]
 		];
-		$results = $this->client->callMethodSynchronous( 'maniphest.search',
-			$params );
-		$resultData = $results['data'];
+		$resultData = $this->callAPI( 'maniphest.search', $params );
+		if ( $this->verbose ) {
+			echo 'Found ' . count( $resultData ) . ' tasks in project ' .
+				$projectName . PHP_EOL;
+		}
 		foreach ( $resultData as $data ) {
 			$this->parseTask( $data, true );
 		}
@@ -204,9 +235,7 @@ class ImportPhabData extends Maintenance {
 				]
 			]
 		];
-		$results = $this->client->callMethodSynchronous( 'maniphest.search',
-			$params );
-		$resultData = $results['data'];
+		$resultData = $this->callAPI( 'maniphest.search', $params );
 		foreach ( $resultData as $data ) {
 			$this->parseTask( $data, false );
 		}
@@ -274,9 +303,7 @@ class ImportPhabData extends Maintenance {
 				]
 			]
 		];
-		$results = $this->client->callMethodSynchronous( 'maniphest.search',
-			$params );
-		$resultData = $results['data'];
+		$resultData = $this->callAPI( 'maniphest.search', $params );
 		foreach ( $resultData as $data ) {
 			$this->parseTask( $data, false );
 			$this->phabTasks[$parentTaskID]['subtasks'][] = $data['id'];
@@ -294,9 +321,7 @@ class ImportPhabData extends Maintenance {
 				],
 			]
 		];
-		$results = $this->client->callMethodSynchronous( 'project.search',
-			$params );
-		$resultData = $results['data'];
+		$resultData = $this->callAPI( 'project.search', $params );
 		if ( count( $resultData ) > 0 ) {
 			$this->parseProject( $resultData[0] );
 		}
@@ -324,9 +349,7 @@ class ImportPhabData extends Maintenance {
 				],
 			]
 		];
-		$results = $this->client->callMethodSynchronous( 'user.search',
-			$params );
-		$resultData = $results['data'];
+		$resultData = $this->callAPI( 'user.search', $params );
 		if ( count( $resultData ) > 0 ) {
 			$this->parseUser( $resultData[0] );
 		}
