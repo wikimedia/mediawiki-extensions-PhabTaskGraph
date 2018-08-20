@@ -134,12 +134,12 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 					'label-message' => 'phabtaskgraph-status-field-label',
 					'type' => 'multiselect',
 					'options' => [
-						wfMessage('phabtaskgraph-status-open')->plain() => 'open',
-						wfMessage('phabtaskgraph-status-stalled')->plain() => 'stalled',
-						wfMessage('phabtaskgraph-status-resolved')->plain() => 'resolved',
-						wfMessage('phabtaskgraph-status-invalid')->plain() => 'invalid',
-						wfMessage('phabtaskgraph-status-declined')->plain() => 'declined',
-						wfMessage('phabtaskgraph-status-duplicate')->plain() => 'duplicate'
+						$this->msg('phabtaskgraph-status-open')->escaped() => 'open',
+						$this->msg('phabtaskgraph-status-stalled')->escaped() => 'stalled',
+						$this->msg('phabtaskgraph-status-resolved')->escaped() => 'resolved',
+						$this->msg('phabtaskgraph-status-invalid')->escaped() => 'invalid',
+						$this->msg('phabtaskgraph-status-declined')->escaped() => 'declined',
+						$this->msg('phabtaskgraph-status-duplicate')->escaped() => 'duplicate'
 					],
 					'default' => $statusarray,
 					'name' => 'status'
