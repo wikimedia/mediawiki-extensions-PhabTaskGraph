@@ -430,7 +430,7 @@ class ImportPhabData extends Maintenance {
 			$pos = strpos( $project['name'], ' (' );
 			if ( $pos !== false ) {
 				$name = substr( $project['name'], 0, $pos );
-				$column = substr( $project['name'], $pos + 2, -1);
+				$column = substr( $project['name'], $pos + 2, -1 );
 			} else {
 				$name = $project['name'];
 			}

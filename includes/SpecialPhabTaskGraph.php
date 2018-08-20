@@ -15,8 +15,7 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 	private $projects = [];
 	private $people = [];
 
-	public function execute ( $parser ) {
-
+	public function execute( $parser ) {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
@@ -134,12 +133,12 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 					'label-message' => 'phabtaskgraph-status-field-label',
 					'type' => 'multiselect',
 					'options' => [
-						$this->msg('phabtaskgraph-status-open')->escaped() => 'open',
-						$this->msg('phabtaskgraph-status-stalled')->escaped() => 'stalled',
-						$this->msg('phabtaskgraph-status-resolved')->escaped() => 'resolved',
-						$this->msg('phabtaskgraph-status-invalid')->escaped() => 'invalid',
-						$this->msg('phabtaskgraph-status-declined')->escaped() => 'declined',
-						$this->msg('phabtaskgraph-status-duplicate')->escaped() => 'duplicate'
+						$this->msg( 'phabtaskgraph-status-open' )->escaped() => 'open',
+						$this->msg( 'phabtaskgraph-status-stalled' )->escaped() => 'stalled',
+						$this->msg( 'phabtaskgraph-status-resolved' )->escaped() => 'resolved',
+						$this->msg( 'phabtaskgraph-status-invalid' )->escaped() => 'invalid',
+						$this->msg( 'phabtaskgraph-status-declined' )->escaped() => 'declined',
+						$this->msg( 'phabtaskgraph-status-duplicate' )->escaped() => 'duplicate'
 					],
 					'default' => $statusarray,
 					'name' => 'status'

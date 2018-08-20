@@ -3,5 +3,5 @@
 $specialPageAliases = [];
 
 $specialPageAliases['en'] = [
-	'PhabTaskGraph' => ['PhabTaskGraph', 'Phabricator Task Graph']
+	'PhabTaskGraph' => [ 'PhabTaskGraph', 'Phabricator Task Graph' ]
 ];
