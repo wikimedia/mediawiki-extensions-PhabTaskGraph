@@ -108,7 +108,7 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 			];
 			$output->addJsConfigVars( 'PhabTaskGraphConfig', $data );
 
-			$html = Html::element( 'div', array( 'id' => $graphName ) );
+			$html = Html::element( 'div', [ 'id' => $graphName ] );
 
 			$output->addHTML( $html );
 		}
