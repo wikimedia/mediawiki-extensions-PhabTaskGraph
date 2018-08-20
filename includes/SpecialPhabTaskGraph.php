@@ -1,7 +1,7 @@
 <?php
 
-require_once( $GLOBALS['wgPhabTaskGraphPhabLibPath'] . '/' .
-	'__phutil_library_init__.php');
+require_once $GLOBALS['wgPhabTaskGraphPhabLibPath'] . '/' .
+	'__phutil_library_init__.php';
 
 class SpecialPhabTaskGraph extends IncludableSpecialPage {
 

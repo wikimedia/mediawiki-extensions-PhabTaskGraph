@@ -98,8 +98,8 @@ class ImportPhabData extends Maintenance {
 			echo 'User Template: ' . $userTemplateName . PHP_EOL;
 		}
 
-		require_once( $GLOBALS['wgPhabTaskGraphPhabLibPath'] . '/' .
-			'__phutil_library_init__.php');
+		require_once $GLOBALS['wgPhabTaskGraphPhabLibPath'] . '/' .
+			'__phutil_library_init__.php';
 		$phabURL = $GLOBALS['wgPhabTaskGraphPhabURL'];
 		$this->client = new ConduitClient( $phabURL );
 		$api_token = $GLOBALS['wgPhabTaskGraphConduitAPIToken'];
