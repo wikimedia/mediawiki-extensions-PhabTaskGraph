@@ -130,8 +130,7 @@ class ImportPhabData extends Maintenance {
 			}
 		}
 
-		require_once $GLOBALS['wgPhabTaskGraphPhabLibPath'] . '/' .
-			'__phutil_library_init__.php';
+		require_once __DIR__ . '/../arcanist/src/__phutil_library_init__.php';
 		$phabURL = $GLOBALS['wgPhabTaskGraphPhabURL'];
 		$this->client = new ConduitClient( $phabURL );
 		$api_token = $GLOBALS['wgPhabTaskGraphConduitAPIToken'];

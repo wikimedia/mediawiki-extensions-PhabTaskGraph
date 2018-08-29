@@ -1,7 +1,6 @@
 <?php
 
-require_once $GLOBALS['wgPhabTaskGraphPhabLibPath'] . '/' .
-	'__phutil_library_init__.php';
+require_once __DIR__ . '/../arcanist/src/__phutil_library_init__.php';
 
 class SpecialPhabTaskGraph extends IncludableSpecialPage {
 
@@ -35,7 +34,11 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 		}
 
 		$statusarray = $request->getArray( 'status' );
-		$size = count( $statusarray );
+		if ( !$statusarray ) {
+			$size = 0;
+		} else {
+			$size = count( $statusarray );
+		}
 		if ( $size === 0 ) {
 			$statusarray = [ 'open', 'stalled' ];
 		} elseif ( $size === 1 ) {

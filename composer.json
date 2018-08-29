@@ -8,12 +8,16 @@
 	"scripts": {
 		"test": [
 			"parallel-lint . --exclude vendor --exclude node_modules",
-			"minus-x check .",
-			"phpcs -sp"
+			"minus-x check includes",
+			"minus-x check maintenance",
+			"phpcs -sp includes",
+			"phpcs -sp maintenance"
 		],
 		"fix": [
-			"minus-x fix .",
-			"phpcbf"
+			"minus-x fix includes",
+			"minus-x fix maintenance",
+			"phpcbf includes",
+			"phpcbf maintenance"
 		]
 	}
 }
