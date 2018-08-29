@@ -68,9 +68,6 @@
 		"PhabTaskGraphPhabURL": {
 			"value": "https://phabricator.wikimedia.org"
 		},
-		"PhabTaskGraphPhabLibPath": {
-			"value": "/usr/share/libphutil/src"
-		},
 		"PhabTaskGraphConduitAPIToken": {
 			"value": null
 		}
