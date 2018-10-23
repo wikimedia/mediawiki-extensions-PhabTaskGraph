@@ -273,6 +273,10 @@ class ImportPhabData extends Maintenance {
 			$project = [];
 			$this->getProject( $projphID );
 			$project['name'] = $this->projects[$projphID]['name'];
+			if ( isset( $this->projects[$projphID]['parent-name'] ) ) {
+				$project['name'] = $this->projects[$projphID]['parent-name'] .
+					' (' . $project['name'] . ')';
+			}
 			if ( array_key_exists( 'columns', $data['attachments'] ) &&
 				array_key_exists( $projphID,
 				$data['attachments']['columns']['boards'] ) ) {
@@ -335,6 +339,9 @@ class ImportPhabData extends Maintenance {
 		$project = [];
 		$project['name'] = $data['fields']['name'];
 		$project['color'] = $data['fields']['color']['key'];
+		if ( isset( $data['fields']['parent']['name'] ) ) {
+			$project['parent-name'] = $data['fields']['parent']['name'];
+		}
 		$this->projects[$projphID] = $project;
 	}
 
@@ -416,15 +423,16 @@ class ImportPhabData extends Maintenance {
 
 	private function formatProject( $project, $projectTemplateName ) {
 		$column = null;
-		$pos = strpos( $project['name'], ' (' );
-		if ( $pos !== false ) {
-			$parts = explode( ' (', $project['name'] );
-			$name = $parts[0];
-			$column = substr( $parts[1], 0, -1 );
-		} else {
+		if ( isset( $project['column'] ) ) {
 			$name = $project['name'];
-			if ( isset( $project['column'] ) ) {
-				$column = $project['column'];
+			$column = $project['column'];
+		} else {
+			$pos = strpos( $project['name'], ' (' );
+			if ( $pos !== false ) {
+				$name = substr( $project['name'], 0, $pos );
+				$column = substr( $project['name'], $pos + 2, -1);
+			} else {
+				$name = $project['name'];
 			}
 		}
 		$formattedProject = '{{' . $projectTemplateName . PHP_EOL;
