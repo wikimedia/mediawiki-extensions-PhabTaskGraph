@@ -42,6 +42,7 @@ require_once ( "$IP/maintenance/Maintenance.php" );
 class ImportPhabData extends Maintenance {
 	private $client = null;
 	private $dry_run = false;
+	private $create = false;
 	private $verbose = false;
 	private $save_info = false;
 	private $delay = false;
@@ -53,7 +54,7 @@ class ImportPhabData extends Maintenance {
 		parent::__construct();
 		$this->mDescription = "CLI utility to import Phabricator data into a wiki.";
 		$this->addArg( "project",
-			"Phabricator project to search for tasks in.", true );
+			"Phabricator project(s) to search for tasks (comma-separated, no spaces).", true );
 		$this->addArg( "category",
 			"Category of task pages (default: Phabricator Tasks).", false );
 		$this->addArg( "task template",
@@ -66,6 +67,8 @@ class ImportPhabData extends Maintenance {
 			"Template for Phabricator users (default: Phabricator User).",
 			false );
 		$this->addOption( "dry-run", "Don't edit the wiki pages.",
+			false, false, 'n' );
+		$this->addOption( "create", "Create wiki pages for tasks that don't exist",
 			false, false, 'n' );
 		$this->addOption( "verbose", "Verbose output",
 			false, false, 'v' );
@@ -81,17 +84,26 @@ class ImportPhabData extends Maintenance {
 	 */
 	public function execute() {
 		$this->dry_run = $this->getOption( 'dry-run' );
+		$this->create = $this->getOption( 'create' );
 		$this->verbose = $this->getOption( 'verbose' );
 		$this->save_info = $this->getOption( 'save-info' );
 		$this->delay = intval( $this->getOption( 'delay', 0 ) );
 
-		$projectName = $this->getArg( 0 );
-		$categoryName = $this->getArg( 1, 'Phabricator Tasks' );
-		$taskTemplateName = $this->getArg( 2, 'Phabricator Task' );
-		$projectTemplateName = $this->getArg( 3, 'Phabricator Project' );
-		$userTemplateName = $this->getArg( 4, 'Phabricator User' );
+		$projectNames = $this->getArg( 0 );
+		$namespaceName = $this->getArg( 1, '0' );
+		$categoryName = $this->getArg( 2, 'Phabricator Tasks' );
+		$taskTemplateName = $this->getArg( 3, 'Phabricator Task' );
+		$projectTemplateName = $this->getArg( 4, 'Phabricator Project' );
+		$userTemplateName = $this->getArg( 5, 'Phabricator User' );
 		if ( $this->verbose ) {
-			echo 'Project: ' . $projectName . PHP_EOL;
+			echo 'Project(s): ' . $projectNames . PHP_EOL;
+			echo 'Namespace: ';
+			if ( $namespaceName === '0' ) {
+				echo '(main)';
+			} else {
+				echo $namespaceName;
+			}
+			echo PHP_EOL;
 			echo 'Category: ' . $categoryName . PHP_EOL;
 			echo 'Task Template: ' . $taskTemplateName . PHP_EOL;
 			echo 'Project Template: ' . $projectTemplateName . PHP_EOL;
@@ -105,11 +117,31 @@ class ImportPhabData extends Maintenance {
 		$api_token = $GLOBALS['wgPhabTaskGraphConduitAPIToken'];
 		$this->client->setConduitToken( $api_token );
 
-		$phabTasks = $this->getPhabricatorTasksFromProject( $projectName );
+		foreach ( explode( ',', $projectNames ) as $projectName ) {
+			$this->getPhabricatorTasksFromProject( $projectName );
+		}
+		$wikiTasks = [];
+
+		if ( $this->create ) {
+
+			foreach ( $this->phabTasks as $taskID => $task ) {
+				$title = $taskID;
+				if ( $title[0] !== 'T' ) {
+					$title = 'T' . $title;
+				}
+				if ( $namespaceName !== '0' ) {
+					$title = $namespaceName . ':' . $title;
+				}
+				$title = Title::newFromText( $title );
+				if ( !is_null( $title ) ) {
+					$wikiTasks[$taskID] = $title;
+				}
+			}
+
+		}
 
 		$category = Category::newFromName( $categoryName );
 		$titles = $category->getMembers();
-		$wikiTasks = [];
 		foreach ( $titles as $title ) {
 			$taskID = $title->getText();
 			if ( $taskID[0] === 'T' ) {
@@ -136,15 +168,19 @@ class ImportPhabData extends Maintenance {
 		if ( $this->verbose || ( $this->save_info && !$this->dry_run ) ) {
 			$info = 'Count of wiki pages in category ' . $categoryName . ': ' .
 				count( $wikiTasks ) . PHP_EOL . PHP_EOL;
-			$info .= 'Count of Phabricator tasks in project ' . $projectName .
+			$info .= 'Count of Phabricator tasks in project(s) ' . $projectNames .
 				' and all subtasks: ' . count( $this->phabTasks ) .
 				PHP_EOL . PHP_EOL;
-			$info .= 'Open Phabricator tasks in project ' . $projectName .
+			$info .= 'Open Phabricator tasks in project(s) ' . $projectNames .
 				' that do not have wiki pages:' . PHP_EOL;
 			foreach ( $this->phabTasks as $taskID => $task ) {
 				if ( !isset( $wikiTasks[$taskID] ) && $task['fromProject'] &&
 					$task['status'] === 'open' ) {
-					$info .= '* ' . $phabURL . '/T' . $taskID . PHP_EOL;
+					$info .= '* ' . $phabURL . '/T' . $taskID . ' ([[';
+						if ( $namespaceName !== '0' ) {
+							$info .= $namespaceName . ':';
+						}
+					$info .= $taskID . ']])' . PHP_EOL;
 				}
 			}
 
@@ -211,7 +247,7 @@ class ImportPhabData extends Maintenance {
 		];
 		$resultData = $this->callAPI( 'maniphest.search', $params );
 		if ( $this->verbose ) {
-			echo 'Found ' . count( $resultData ) . ' tasks in project ' .
+			echo PHP_EOL . 'Found ' . count( $resultData ) . ' tasks in project ' .
 				$projectName . PHP_EOL;
 		}
 		foreach ( $resultData as $data ) {
@@ -373,11 +409,29 @@ class ImportPhabData extends Maintenance {
 		$this->users[$userphID] = $user;
 	}
 
+  private function fixName( $name ) {
+		$old = [
+			'|',
+			'{',
+			'}',
+			'[',
+			']'
+		];
+		$new = [
+			'&#124;',
+			'&#123;',
+			'&#125;',
+			'&#91;',
+			'&#93;'
+		];
+		return str_replace( $old, $new, $name );
+	 }
+
 	private function formatTask( $taskID, $task, $taskTemplateName,
 		$projectTemplateName, $userTemplateName ) {
 		$formattedTask = '{{' . $taskTemplateName . PHP_EOL;
 		$formattedTask .=
-			'|name=' . $task['name'] . PHP_EOL;
+			'|name=' . $this->fixName( $task['name'] ) . PHP_EOL;
 		$formattedTask .=
 			'|status=' . $task['status'] . PHP_EOL;
 		$formattedTask .=
@@ -436,7 +490,7 @@ class ImportPhabData extends Maintenance {
 			}
 		}
 		$formattedProject = '{{' . $projectTemplateName . PHP_EOL;
-		$formattedProject .= '|name=' . $name . PHP_EOL;
+		$formattedProject .= '|name=' . $this->fixName( $name ) . PHP_EOL;
 		if ( !is_null( $column ) ) {
 			$formattedProject .= '|column=' . $column . PHP_EOL;
 		}
@@ -453,13 +507,20 @@ class ImportPhabData extends Maintenance {
 			return;
 		}
 		$wikiPage = new WikiPage( $title );
-		$wikiPageContent = $wikiPage->getContent();
-		$articleText = $wikiPageContent->getNativeData();
+		$articleText = '';
 
-		$pos = strpos( $articleText, '{{' . $taskTemplateName . PHP_EOL );
-		if ( $pos !== false ) {
-			$articleText = substr( $articleText, 0, $pos );
+		if ( $title->exists() ) {
+
+			$wikiPageContent = $wikiPage->getContent();
+			$articleText = $wikiPageContent->getNativeData();
+
+			$pos = strpos( $articleText, '{{' . $taskTemplateName . PHP_EOL );
+			if ( $pos !== false ) {
+				$articleText = substr( $articleText, 0, $pos );
+			}
+
 		}
+
 		$articleText .= $formattedTask;
 		$edit_summary = 'updated task from Phabricator';
 		$flags = EDIT_MINOR;
