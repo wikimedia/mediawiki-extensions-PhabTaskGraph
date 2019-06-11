@@ -41,10 +41,11 @@ require_once ( "$IP/maintenance/Maintenance.php" );
  */
 class ImportPhabData extends Maintenance {
 	private $client = null;
+	private $verbose = false;
 	private $dry_run = false;
 	private $create = false;
-	private $verbose = false;
 	private $save_info = false;
+	private $preload_task = false;
 	private $delay = false;
 	private $phabTasks = [];
 	private $projects = [];
@@ -66,14 +67,16 @@ class ImportPhabData extends Maintenance {
 		$this->addArg( "user template",
 			"Template for Phabricator users (default: Phabricator User).",
 			false );
+		$this->addOption( "verbose", "Verbose output",
+			false, false, 'v' );
 		$this->addOption( "dry-run", "Don't edit the wiki pages.",
 			false, false, 'n' );
 		$this->addOption( "create", "Create wiki pages for tasks that don't exist",
 			false, false, 'n' );
-		$this->addOption( "verbose", "Verbose output",
-			false, false, 'v' );
 		$this->addOption( "save-info", "Save import information to wiki page",
 			false, true, 's' );
+		$this->addOption( "preload-task", "Name of preload page for new tasks",
+			false, true, 'p' );
 		$this->addOption( "delay", "Delay in seconds before each Conduit API call (default: 0)",
 			false, true, 'd' );
 		$this->requireExtension( 'PhabTaskGraph' );
@@ -83,10 +86,11 @@ class ImportPhabData extends Maintenance {
 	 * @inheritDoc
 	 */
 	public function execute() {
+		$this->verbose = $this->getOption( 'verbose' );
 		$this->dry_run = $this->getOption( 'dry-run' );
 		$this->create = $this->getOption( 'create' );
-		$this->verbose = $this->getOption( 'verbose' );
 		$this->save_info = $this->getOption( 'save-info' );
+		$this->preload_task = $this->getOption( 'preload-task' );
 		$this->delay = intval( $this->getOption( 'delay', 0 ) );
 
 		$projectNames = $this->getArg( 0 );
@@ -108,6 +112,12 @@ class ImportPhabData extends Maintenance {
 			echo 'Task Template: ' . $taskTemplateName . PHP_EOL;
 			echo 'Project Template: ' . $projectTemplateName . PHP_EOL;
 			echo 'User Template: ' . $userTemplateName . PHP_EOL;
+			if ( $this->save_info ) {
+				echo 'Save Info to Page: ' . $this->save_info . PHP_EOL;
+			}
+			if ( $this->preload_task ) {
+				echo 'Preload Task Page: ' . $this->preload_task . PHP_EOL;
+			}
 		}
 
 		require_once $GLOBALS['wgPhabTaskGraphPhabLibPath'] . '/' .
@@ -158,10 +168,12 @@ class ImportPhabData extends Maintenance {
 
 		if ( !$this->dry_run ) {
 			foreach ( $wikiTasks as $taskID => $title ) {
-				$formattedTask = $this->formatTask( $taskID,
-					$this->phabTasks[$taskID], $taskTemplateName, $projectTemplateName,
-					$userTemplateName );
-				$this->editTask( $title, $taskTemplateName, $formattedTask );
+				if ( isset( $this->phabTasks[$taskID] ) ) {
+					$formattedTask = $this->formatTask( $taskID,
+						$this->phabTasks[$taskID], $taskTemplateName, $projectTemplateName,
+						$userTemplateName );
+					$this->editTask( $title, $taskTemplateName, $formattedTask );
+				}
 			}
 		}
 
@@ -176,11 +188,17 @@ class ImportPhabData extends Maintenance {
 			foreach ( $this->phabTasks as $taskID => $task ) {
 				if ( !isset( $wikiTasks[$taskID] ) && $task['fromProject'] &&
 					$task['status'] === 'open' ) {
-					$info .= '* ' . $phabURL . '/T' . $taskID . ' ([[';
-						if ( $namespaceName !== '0' ) {
-							$info .= $namespaceName . ':';
-						}
-					$info .= $taskID . ']])' . PHP_EOL;
+					$info .= '* ' . $phabURL . '/T' . $taskID .
+						' (<span class="plainlinks">[{{fullurl:';
+					if ( $namespaceName !== '0' ) {
+						$info .= $namespaceName . ':';
+					}
+					$info .= 'T' . $taskID;
+					if ( $this->preload_task ) {
+						$info .= '|action=edit&preload={{urlencode:' .
+							$this->preload_task . '}}';
+					}
+					$info .= '}} T' . $taskID . ']</span>)' . PHP_EOL;
 				}
 			}
 
