@@ -42,6 +42,7 @@ require_once ( "$IP/maintenance/Maintenance.php" );
 class ImportPhabData extends Maintenance {
 	private $client = null;
 	private $verbose = false;
+	private $minimal = false;
 	private $dry_run = false;
 	private $create = false;
 	private $save_info = false;
@@ -69,10 +70,13 @@ class ImportPhabData extends Maintenance {
 			false );
 		$this->addOption( "verbose", "Verbose output",
 			false, false, 'v' );
+		$this->addOption( "minimal",
+			"Only get tasks in listed projects and their subtasks (ignore category)",
+			false, false, 'm' );
 		$this->addOption( "dry-run", "Don't edit the wiki pages.",
 			false, false, 'n' );
 		$this->addOption( "create", "Create wiki pages for tasks that don't exist",
-			false, false, 'n' );
+			false, false, 'c' );
 		$this->addOption( "save-info", "Save import information to wiki page",
 			false, true, 's' );
 		$this->addOption( "preload-task", "Name of preload page for new tasks",
@@ -87,6 +91,7 @@ class ImportPhabData extends Maintenance {
 	 */
 	public function execute() {
 		$this->verbose = $this->getOption( 'verbose' );
+		$this->minimal = $this->getOption( 'minimal' );
 		$this->dry_run = $this->getOption( 'dry-run' );
 		$this->create = $this->getOption( 'create' );
 		$this->save_info = $this->getOption( 'save-info' );
@@ -150,14 +155,20 @@ class ImportPhabData extends Maintenance {
 
 		}
 
-		$category = Category::newFromName( $categoryName );
-		$titles = $category->getMembers();
-		foreach ( $titles as $title ) {
-			$taskID = $title->getText();
-			if ( $taskID[0] === 'T' ) {
-				$taskID = substr( $taskID, 1 );
+		if ( !$this->minimal ) {
+			$category = Category::newFromName( $categoryName );
+			$titles = $category->getMembers();
+			if ( $this->verbose ) {
+				echo PHP_EOL . 'Found ' . count( $titles ) . ' tasks in category ' .
+					$categoryName . PHP_EOL;
 			}
-			$wikiTasks[$taskID] = $title;
+			foreach ( $titles as $title ) {
+				$taskID = $title->getText();
+				if ( $taskID[0] === 'T' ) {
+					$taskID = substr( $taskID, 1 );
+				}
+				$wikiTasks[$taskID] = $title;
+			}
 		}
 
 		foreach ( $wikiTasks as $taskID => $title ) {
@@ -177,28 +188,31 @@ class ImportPhabData extends Maintenance {
 			}
 		}
 
-		if ( $this->verbose || ( $this->save_info && !$this->dry_run ) ) {
+		if ( ( $this->verbose || ( $this->save_info && !$this->dry_run ) ) &&
+			!$this->minimal ) {
 			$info = 'Count of wiki pages in category ' . $categoryName . ': ' .
 				count( $wikiTasks ) . PHP_EOL . PHP_EOL;
 			$info .= 'Count of Phabricator tasks in project(s) ' . $projectNames .
 				' and all subtasks: ' . count( $this->phabTasks ) .
 				PHP_EOL . PHP_EOL;
 			$info .= 'Open Phabricator tasks in project(s) ' . $projectNames .
-				' that do not have wiki pages:' . PHP_EOL;
+				' that did not have wiki pages:' . PHP_EOL;
 			foreach ( $this->phabTasks as $taskID => $task ) {
 				if ( !isset( $wikiTasks[$taskID] ) && $task['fromProject'] &&
 					$task['status'] === 'open' ) {
 					$info .= '* ' . $phabURL . '/T' . $taskID .
 						' (<span class="plainlinks">[{{fullurl:';
+					$pagename = 'T' . $taskID;
 					if ( $namespaceName !== '0' ) {
-						$info .= $namespaceName . ':';
+						$pagename = $namespaceName . ':' . $pagename;
 					}
-					$info .= 'T' . $taskID;
+					$info .= $pagename;
 					if ( $this->preload_task ) {
 						$info .= '|action=edit&preload={{urlencode:' .
 							$this->preload_task . '}}';
 					}
-					$info .= '}} T' . $taskID . ']</span>)' . PHP_EOL;
+					$info .= '}} ' . $pagename . ']</span>)';
+					$info .= ' {{#ifexist:' . $pagename . '| - created}}' . PHP_EOL;
 				}
 			}
 
@@ -219,6 +233,10 @@ class ImportPhabData extends Maintenance {
 					echo 'Invalid page title: ' . $this->save_info . PHP_EOL;
 				}
 			}
+		}
+
+		if ( $this->verbose && $this->minimal ) {
+			echo PHP_EOL;
 		}
 	}
 
@@ -308,6 +326,9 @@ class ImportPhabData extends Maintenance {
 		}
 		$task = [];
 		$task['name'] = $data['fields']['name'];
+		$task['dateCreated'] = $data['fields']['dateCreated'];
+		$task['dateModified'] = $data['fields']['dateModified'];
+		$task['dateClosed'] = $data['fields']['dateClosed'];
 		$task['status'] = $data['fields']['status']['value'];
 		$task['color'] = $data['fields']['priority']['color'];
 		if ( $data['fields']['authorPHID'] ) {
@@ -326,18 +347,20 @@ class ImportPhabData extends Maintenance {
 		foreach ( $data['attachments']['projects']['projectPHIDs'] as $projphID ) {
 			$project = [];
 			$this->getProject( $projphID );
-			$project['name'] = $this->projects[$projphID]['name'];
-			if ( isset( $this->projects[$projphID]['parent-name'] ) ) {
-				$project['name'] = $this->projects[$projphID]['parent-name'] .
-					' (' . $project['name'] . ')';
+			if ( isset( $this->projects[$projphID] ) ) {
+				$project['name'] = $this->projects[$projphID]['name'];
+				if ( isset( $this->projects[$projphID]['parent-name'] ) ) {
+					$project['name'] = $this->projects[$projphID]['parent-name'] .
+						' (' . $project['name'] . ')';
+				}
+				if ( array_key_exists( 'columns', $data['attachments'] ) &&
+					array_key_exists( $projphID,
+					$data['attachments']['columns']['boards'] ) ) {
+					$project['column'] =
+						$data['attachments']['columns']['boards'][$projphID]['columns'][0]['name'];
+				}
+				$task['projects'][$projphID] = $project;
 			}
-			if ( array_key_exists( 'columns', $data['attachments'] ) &&
-				array_key_exists( $projphID,
-				$data['attachments']['columns']['boards'] ) ) {
-				$project['column'] =
-					$data['attachments']['columns']['boards'][$projphID]['columns'][0]['name'];
-			}
-			$task['projects'][] = $project;
 		}
 		$task['fromProject'] = $fromProject;
 		$task['subtasks'] = [];
@@ -454,6 +477,13 @@ class ImportPhabData extends Maintenance {
 			'|status=' . $task['status'] . PHP_EOL;
 		$formattedTask .=
 			'|color=' . $task['color'] . PHP_EOL;
+		$formattedTask .= '|dateCreated=' . $task['dateCreated'] . PHP_EOL;
+		if ( !is_null( $task['dateModified'] ) ) {
+			$formattedTask .= '|dateModified=' . $task['dateModified'] . PHP_EOL;
+		}
+		if ( !is_null( $task['dateClosed'] ) ) {
+			$formattedTask .= '|dateClosed=' . $task['dateClosed'] . PHP_EOL;
+		}
 		if ( !is_null( $task['author'] ) ) {
 			$formattedTask .=
 				'|author=' . $this->formatUser( 'author', $task['author'],
