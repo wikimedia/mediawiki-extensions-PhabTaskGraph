@@ -359,7 +359,8 @@ class ImportPhabData extends Maintenance {
 					$project['column'] =
 						$data['attachments']['columns']['boards'][$projphID]['columns'][0]['name'];
 				}
-				$task['projects'][$projphID] = $project;
+				$task['projects'][$this->projects[$projphID]['name'] . $projphID] =
+					$project;
 			}
 		}
 		$task['fromProject'] = $fromProject;
@@ -497,6 +498,7 @@ class ImportPhabData extends Maintenance {
 		if ( count( $task['projects'] ) > 0 ) {
 			$formattedTask .=
 				'|projects=';
+			ksort( $task['projects'] );
 			foreach ( $task['projects'] as $project ) {
 				$formattedTask .=
 					$this->formatProject( $project, $projectTemplateName );
