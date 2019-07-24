@@ -137,8 +137,7 @@ class ImportPhabData extends Maintenance {
 		}
 		$wikiTasks = [];
 
-		if ( $this->create ) {
-
+		if ( $this->create || $this->minimal ) {
 			foreach ( $this->phabTasks as $taskID => $task ) {
 				$title = $taskID;
 				if ( $title[0] !== 'T' ) {
@@ -152,7 +151,6 @@ class ImportPhabData extends Maintenance {
 					$wikiTasks[$taskID] = $title;
 				}
 			}
-
 		}
 
 		if ( !$this->minimal ) {
@@ -178,6 +176,9 @@ class ImportPhabData extends Maintenance {
 		}
 
 		if ( !$this->dry_run ) {
+			if ( $this->verbose ) {
+				echo PHP_EOL;
+			}
 			foreach ( $wikiTasks as $taskID => $title ) {
 				if ( isset( $this->phabTasks[$taskID] ) ) {
 					$formattedTask = $this->formatTask( $taskID,
@@ -322,7 +323,7 @@ class ImportPhabData extends Maintenance {
 			return;
 		}
 		if ( $this->verbose ) {
-			echo '.'; // let the user know it is working
+			echo 'P'; // let the user know it is working (parsing)
 		}
 		$task = [];
 		$task['name'] = $data['fields']['name'];
@@ -550,7 +551,7 @@ class ImportPhabData extends Maintenance {
 
 	private function editTask( $title, $taskTemplateName, $formattedTask ) {
 		if ( $this->verbose ) {
-			echo '.'; // let the user know it is working
+			echo 'E'; // let the user know it is working (editing)
 		}
 		if ( $title->getContentModel() !== CONTENT_MODEL_WIKITEXT ) {
 			echo $title->getPrefixedText() . ' is not a wikitext page.' . PHP_EOL;
