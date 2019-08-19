@@ -54,7 +54,7 @@ class ImportPhabData extends Maintenance {
 
 	public function __construct() {
 		parent::__construct();
-		$this->mDescription = "CLI utility to import Phabricator data into a wiki.";
+		$this->addDescription( "CLI utility to import Phabricator data into a wiki." );
 		$this->addArg( "project",
 			"Phabricator project(s) to search for tasks (comma-separated, no spaces).", true );
 		$this->addArg( "category",
