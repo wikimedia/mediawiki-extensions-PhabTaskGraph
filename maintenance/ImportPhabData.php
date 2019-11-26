@@ -332,6 +332,7 @@ class ImportPhabData extends Maintenance {
 		$task['dateClosed'] = $data['fields']['dateClosed'];
 		$task['status'] = $data['fields']['status']['value'];
 		$task['color'] = $data['fields']['priority']['color'];
+		$task['points'] = $data['fields']['points'];
 		if ( $data['fields']['authorPHID'] ) {
 			$this->getUser( $data['fields']['authorPHID'] );
 			$task['author'] = $this->users[$data['fields']['authorPHID']];
@@ -479,6 +480,8 @@ class ImportPhabData extends Maintenance {
 			'|status=' . $task['status'] . PHP_EOL;
 		$formattedTask .=
 			'|color=' . $task['color'] . PHP_EOL;
+		$formattedTask .=
+			'|points=' . $task['points'] . PHP_EOL;
 		$formattedTask .= '|dateCreated=' . $task['dateCreated'] . PHP_EOL;
 		if ( !is_null( $task['dateModified'] ) ) {
 			$formattedTask .= '|dateModified=' . $task['dateModified'] . PHP_EOL;
