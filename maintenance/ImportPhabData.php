@@ -266,6 +266,14 @@ class ImportPhabData extends Maintenance {
 		return $allData;
 	}
 
+	private function callOldAPI( $api, $params ) {
+		if ( $this->delay > 0 ) {
+			sleep( $this->delay );
+		}
+		$results = $this->client->callMethodSynchronous( $api, $params );
+		return $results;
+	}
+
 	private function getPhabricatorTasksFromProject( $projectName ) {
 		$params = [
 			'constraints' => [
@@ -346,8 +354,12 @@ class ImportPhabData extends Maintenance {
 			$task['owner'] = null;
 		}
 		$task['projects'] = [];
+
+		$taskTransactionData = $this->getTaskTransactions( $taskID );
+
 		foreach ( $data['attachments']['projects']['projectPHIDs'] as $projphID ) {
 			$project = [];
+			$project['entryDate'] = $task['dateCreated'];
 			$this->getProject( $projphID );
 			if ( isset( $this->projects[$projphID] ) ) {
 				$project['name'] = $this->projects[$projphID]['name'];
@@ -360,15 +372,43 @@ class ImportPhabData extends Maintenance {
 					$data['attachments']['columns']['boards'] ) ) {
 					$project['column'] =
 						$data['attachments']['columns']['boards'][$projphID]['columns'][0]['name'];
+					$columnID = $data['attachments']['columns']['boards'][$projphID]['columns'][0]['phid'];
+					$project['entryDate'] =
+						$this->parseColumnEntryDate( $taskTransactionData, $columnID, $task['dateCreated'] );
 				}
-				$task['projects'][$this->projects[$projphID]['name'] . $projphID] =
-					$project;
+				$task['projects'][$this->projects[$projphID]['name'] . $projphID] = $project;
 			}
 		}
 		$task['fromProject'] = $fromProject;
 		$task['subtasks'] = [];
 		$this->phabTasks[$taskID] = $task;
 		$this->getSubtasks( $taskID );
+	}
+
+	private function getTaskTransactions( $taskID ) {
+		$params = [
+			'ids' => [
+				intval( $taskID )
+			]
+		];
+		$resultData = $this->callOldAPI( 'maniphest.gettasktransactions', $params );
+		return $resultData[$taskID];
+	}
+
+	private function parseColumnEntryDate( $taskTransactionData, $columnID, $taskCreationDate ) {
+		$latestDate = $taskCreationDate;
+		foreach ( $taskTransactionData as $data ) {
+			if ( array_key_exists( 'transactionType', $data ) &&
+				$data['transactionType'] === 'core:columns' ) {
+				if ( isset( $data['newValue'] ) && array_key_exists( 'columnPHID', $data['newValue'][0] ) &&
+					$data['newValue'][0]['columnPHID'] === $columnID ) {
+					if ( is_null( $latestDate ) || $latestDate < $data['dateCreated'] ) {
+						$latestDate = $data['dateCreated'];
+					}
+				}
+			}
+		}
+		return $latestDate;
 	}
 
 	private function getSubtasks( $parentTaskID ) {
@@ -548,6 +588,7 @@ class ImportPhabData extends Maintenance {
 		if ( !is_null( $column ) ) {
 			$formattedProject .= '|column=' . $column . PHP_EOL;
 		}
+		$formattedProject .= '|entryDate=' . $project['entryDate'] . PHP_EOL;
 		$formattedProject .= '}}';
 		return $formattedProject;
 	}
