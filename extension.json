@@ -1,6 +1,6 @@
 {
 	"name": "PhabTaskGraph",
-	"version": "1.0",
+	"version": "2.0",
 	"author": [
 		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
 	],
@@ -28,7 +28,7 @@
 				"PhabTaskGraph.css"
 			],
 			"scripts": [
-				"d3.v3.min.js",
+				"d3.v5.min.js",
 				"PhabTaskGraph.js"
 			],
 			"messages": [
@@ -42,9 +42,15 @@
 		"remoteExtPath": "PhabTaskGraph/resources"
 	},
 	"config": {
-		"PhabTaskGraphPhabURL": "https://phabricator.wikimedia.org",
-		"PhabTaskGraphPhabLibPath": "/usr/share/libphutil/src",
-		"PhabTaskGraphConduitAPIToken": null
+		"PhabTaskGraphPhabURL": {
+			"value": "https://phabricator.wikimedia.org"
+		},
+		"PhabTaskGraphPhabLibPath": {
+			"value": "/usr/share/libphutil/src"
+		},
+		"PhabTaskGraphConduitAPIToken": {
+			"value": null
+		}
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }

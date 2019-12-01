@@ -83,8 +83,8 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 		$index = 0;
 		foreach ( $this->links as $link ) {
 			$newlink = [];
-			$newlink['source'] = $this->nodes[$link['source']]['index'];
-			$newlink['target'] = $this->nodes[$link['target']]['index'];
+			$newlink['source'] = $this->nodes[$link['source']]['id'];
+			$newlink['target'] = $this->nodes[$link['target']]['id'];
 			$linkarray[$index] = $newlink;
 			$index++;
 		}
@@ -107,7 +107,10 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 			];
 			$output->addJsConfigVars( 'PhabTaskGraphConfig', $data );
 
-			$html = Html::element( 'div', [ 'id' => $graphName ] );
+			$html = Html::element( 'div',
+				[
+					'id' => $graphName
+				] );
 
 			$output->addHTML( $html );
 		}

@@ -10,53 +10,31 @@
 		},
 		showGraph: function (id, selected_tasks, selected_projects, nodes, links,
 			projects, people, url, width, height) {
-			var radius = 8;
-			var padding = 5;
-
+			var dragging = false;
 			var selectedNode = -1;
+
 			var linkedByIndex = {};
 			links.forEach(function (d) {
 				linkedByIndex[d.source + ',' + d.target] = 1;
 			});
 
-			var force = d3
-				.layout
-				.force()
-				.charge(-400)
-				.linkDistance(120)
-				.size([width, height]);
 
-			var div = d3
-				.select('#' + id);
-
-			var tooltip = div
-				.append('div')
-				.attr('class', 'phabtaskgraph-tooltip')
-				.style('opacity', 0);
-
-			var zoom = d3
-				.behavior
-				.zoom()
-				.scaleExtent([0.5,5])
-				.on('zoom', zoomed);
+			var div = d3.select('#' + id);
 
 			var svg = div
 				.append('svg')
 				.attr('width', width)
 				.attr('height', height)
-				.attr('class', 'phabtaskgraph-graph')
-				.append('g')
-				.call(zoom);
+				.attr('class', 'phabtaskgraph-graph');
 
-			svg
-				.on('click', function() {
-					if (d3.event.altKey) {
-						clearHighlight()
-					}
-				});
-
-			svg
-				.on('dblclick.zoom', null);
+			var simulation = d3.forceSimulation();
+			simulation.force('link',
+				d3.forceLink()
+					.id(function(d) { return d.id; })
+					.distance(100)
+				);
+			simulation.force('charge', d3.forceManyBody());
+			simulation.force('center', d3.forceCenter(width / 2, height / 2));
 
 			svg
 				.append('defs')
@@ -68,46 +46,42 @@
 					return d;
 				})
 				.attr('viewBox', '0 0 10 10')
-				.attr('refX', 20)
+				.attr('refX', 25)
 				.attr('refY', 5)
-				.attr('markerWidth', 8)
-				.attr('markerHeight', 8)
+				.attr('markerWidth', 10)
+				.attr('markerHeight', 10)
 				.attr('orient', 'auto')
 				.append('path')
 				.attr('d', 'M 0 0 L 10 5 L 0 10 z')
 				.attr('class', 'phabtaskgraph-marker');
 
-			var rect = svg
-				.append('rect')
-				.attr('width', width)
-				.attr('height', height)
-				.style('fill', 'none')
-				.style('pointer-events', 'all');
+			var g = svg.append('g');
 
-			var container = svg.append('g');
-
-			var link = container
-				.selectAll('.link')
+			var link = g.append('g')
+				.attr('class', 'links')
+				.selectAll('line')
 				.data(links)
 				.enter()
 				.append('line')
 				.attr('class', 'phabtaskgraph-link')
 				.style('marker-end', 'url(#arrow)');
 
-			var node = container
-				.selectAll('.node')
+			var node = g.append('g')
+				.attr('class', 'nodes')
+				.selectAll('g')
 				.data(nodes)
 				.enter()
 				.append('g')
 				.attr('class', 'phabtaskgraph-node');
 
-			node
+			var circle = node
 				.append('circle')
-				.attr('r', radius - 0.75)
+				.attr('r', 15)
 				.style('fill', function (d) {
 					return d.color;
 				})
-				.style('stroke', function (d) {
+				.attr('stroke-width', 4)
+				.attr('stroke', function (d) {
 					if (selected_tasks.includes(String(d.id))) {
 						return '#00f';
 					}
@@ -117,17 +91,22 @@
 							return '#00f';
 						}
 					}
-					return '#fff';
-				});
+					return d.color;
+				})
+				.attr('class', 'phabtaskgraph-circle')
+				.call(d3.drag()
+					.on('start', dragstarted)
+					.on('drag', dragged)
+					.on('end', dragended));
 
 			node
 				.append('text')
-				.attr('dx', 10)
+				.attr('dx', 20)
 				.attr('dy', '.35em')
 				.text(function (d) {
 					var name = d.name;
-					if (name.length > 30) {
-						name = name.substring(0,30) + '...';
+					if (name.length > 50) {
+						name = name.substring(0,50) + '...';
 					}
 					return name;
 				})
@@ -140,89 +119,85 @@
 
 			node
 				.on('click', function (d) {
-					if (d3.event.altKey) {
-						highlightConnected(d);
-						d3.event.stopPropagation();
-					}
+					highlightConnected(d);
 				});
 
-			var dragging = false;
-			var paused = false;
+			var tooltip = div
+				.append('div')
+				.attr('class', 'phabtaskgraph-tooltip')
+				.style('opacity', 0);
 
 			node
 				.on('mouseover', function (d) {
-					if (force.alpha()) {
-						force.stop();
-						paused = true;
-					}
+					if (dragging) return;
+					if (d3.event.target.tagName != 'circle') return;
+					if (!d3.event.active) simulation.alphaTarget(0);
 					tooltip
 						.transition()
 						.duration(200)
 						.style('opacity', .9);
 					tooltip
 						.html(format_tooltip(d))
-						.style("left", d3.event.offsetX + "px")
-						.style("top", (d3.event.offsetY - 28) + "px");
+						.style("left", (d3.event.offsetX + 30) + "px")
+						.style("top", (d3.event.offsetY - 30) + "px");
 				});
 
 			node
 				.on('mouseout', function (d) {
-					if (!dragging && paused) {
-						force.resume();
-						paused = false;
-					}
+					if (!d3.event.active) simulation.alphaTarget(0.3).restart();
 					tooltip
 						.transition()
 						.duration(500)
 						.style('opacity', 0);
 				});
 
-			var drag = d3
-				.behavior
-				.drag();
+			var zoom = d3
+				.zoom()
+				.on('zoom', zoom_actions);
+			zoom(svg);
+			svg.on('dblclick.zoom', null);
 
-			drag
-				.on('dragstart', function (d) {
-					d3.event.sourceEvent.stopPropagation();
-					dragging = true;
-					if (force.alpha()) {
-						force.stop();
-						paused = true;
-					}
-				});
-
-			drag
-				.on('drag', function (d) {
-					d.px += d3.event.dx;
-					d.py += d3.event.dy;
-					d.x += d3.event.dx;
-					d.y += d3.event.dy;
-					tick();
-				});
-
-			drag
-				.on('dragend', function (d) {
-					if (d3.event.sourceEvent.shiftKey) {
-						d.fixed = !d.fixed;
-					}
-					tick();
-					dragging = false;
-					force.resume();
-					paused = false;
-				});
-
-			node
-				.call(drag);
-
-			force
+			simulation
 				.nodes(nodes)
-				.links(links)
-				.on('tick', tick)
-				.start();
+				.on('tick', ticked);
 
-			function zoomed() {
-				container.attr('transform', 'translate(' + d3.event.translate +
-					')scale(' + d3.event.scale + ')');
+			simulation
+				.force('link')
+				.links(links);
+
+			function ticked() {
+				link
+					.attr('x1', function (d) { return d.source.x; })
+					.attr('y1', function (d) { return d.source.y; })
+					.attr('x2', function (d) { return d.target.x; })
+					.attr('y2', function (d) { return d.target.y; });
+				node
+					.attr('transform', function (d) {
+						return 'translate(' + d.x + ',' + d.y + ')';
+					});
+			}
+
+			function dragstarted(d) {
+				if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+				d.fx = d.x;
+				d.fy = d.y;
+				dragging = true;
+			}
+
+			function dragged(d) {
+				d.fx = d3.event.x;
+				d.fy = d3.event.y;
+			}
+
+			function dragended(d) {
+				if (!d3.event.active) simulation.alphaTarget(0);
+				d.fx = null;
+				d.fy = null;
+				dragging = false;
+			}
+
+			function zoom_actions() {
+				g.attr('transform', d3.event.transform);
 			}
 
 			function format_tooltip (d) {
@@ -261,54 +236,32 @@
 				return html;
 			}
 
-			function tick() {
-				link
-					.attr('x1', function (d) {
-						return d.source.x;
-					})
-					.attr('y1', function (d) {
-						return d.source.y;
-					})
-					.attr('x2', function (d) {
-						return d.target.x;
-					})
-					.attr('y2', function (d) {
-						return d.target.y;
-					});
-				node
-					.attr('transform', function (d) {
-						return 'translate(' + d.x + ',' + d.y + ')';
-					});
-			}
-
 			function neighboring(a, b) {
-				return a.index == b.index || linkedByIndex[a.index + ',' + b.index];
+				return a.id == b.id || linkedByIndex[a.id + ',' + b.id];
 			}
 
 			function highlightConnected(d) {
-				if (selectedNode != d.index) {
+				if (selectedNode == d.id) {
+					node.style('opacity', 1);
+					link.style('opacity', 1);
+					selectedNode = -1;
+				} else {
 					node.style('opacity', function (o) {
 						return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
 					});
 					link.style('opacity', function (o) {
-						return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+						return d.id==o.source.id | d.id==o.target.id ? 1 : 0.1;
 					});
-					selectedNode = d.index;
-				} else {
-					node.style('opacity', 1);
-					link.style('opacity', 1);
-					selectedNode = -1;
+					selectedNode = d.id;
 				}
-			}
-
-			function clearHighlight() {
-				svg
-					.selectAll('.phabtaskgraph-link')
-					.style('opacity', 1);
-				svg
-					.selectAll('.phabtaskgraph-node')
-					.style('opacity', 1);
-				selectedNode = -1;
+				d3.selectAll('.phabtaskgraph-circle')
+					.attr('stroke', function (d) {
+						if (selectedNode == d.id) {
+							return '#00f';
+						} else {
+							return d.color;
+						}
+					});
 			}
 		}
 	};
