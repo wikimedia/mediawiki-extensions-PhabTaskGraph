@@ -9,7 +9,8 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "other",
 	"AutoloadClasses": {
-		"SpecialPhabTaskGraph": "includes/SpecialPhabTaskGraph.php"
+		"SpecialPhabTaskGraph": "includes/SpecialPhabTaskGraph.php",
+		"PhabTaskGraphHooks": "includes/PhabTaskGraphHooks.php"
 	},
 	"SpecialPages": {
 		"PhabTaskGraph": "SpecialPhabTaskGraph"
@@ -35,7 +36,16 @@
 				"phabtaskgraph-author-field-label",
 				"phabtaskgraph-owner-field-label"
 			]
+		},
+		"ext.PTG_DateMultiLineGraph": {
+			"scripts": [
+				"d3.v5.min.js",
+				"PTG_DateMultiLineGraph.js"
+			]
 		}
+	},
+	"Hooks": {
+		"ParserFirstCallInit": "PhabTaskGraphHooks::onParserFirstCallInit"
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "resources",
