@@ -38,6 +38,9 @@
 			]
 		},
 		"ext.PTG_DateMultiLineGraph": {
+			"styles": [
+				"PTG_DateMultiLineGraph.css"
+			],
 			"scripts": [
 				"d3.v5.min.js",
 				"PTG_DateMultiLineGraph.js"

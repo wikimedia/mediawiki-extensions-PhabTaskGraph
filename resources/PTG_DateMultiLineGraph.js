@@ -50,7 +50,6 @@
 			x.domain(d3.extent(xvalues));
 			y.domain([0, d3.max(yvalues)]);
 
-			var valuelines = [];
 			data.forEach(function(d,i) {
 
 				var valueline = d3.line()
@@ -85,6 +84,15 @@
 					.attr('dy', '.15em')
 					.attr('transform', 'rotate(-65)');
 
+
+			svg.append('g')
+				.attr('class', 'grid')
+				.attr('transform', 'translate(0,' + height + ')')
+				.call(d3.axisBottom(x)
+					.ticks(7)
+					.tickSize(-height)
+					.tickFormat(''));
+
 			if (xaxis) {
 				svg.append('text')
 					.attr('x', width / 2)
@@ -95,6 +103,13 @@
 
 			svg.append('g')
 				.call(d3.axisLeft(y));
+
+			svg.append('g')
+				.attr('class', 'grid')
+				.call(d3.axisLeft(y)
+					.ticks(5)
+					.tickSize(-width)
+					.tickFormat(''));
 
 			if (yaxis) {
 				svg.append('text')
