@@ -8,7 +8,7 @@
 				graph.xaxis, graph.yaxis);
 		},
 		showGraph: function (id, data, width, height, xaxis, yaxis) {
-			var margin = {top: 20, right: 20, bottom: 80, left: 50};
+			var margin = {top: 20, right: 20, bottom: 100, left: 50};
 			width = width - margin.left - margin.right;
 			height = height - margin.top - margin.bottom;
 

@@ -9,5 +9,6 @@ $specialPageAliases['en'] = [
 $magicWords = [];
 
 $magicWords['en'] = [
-	'datemultilinegraph' => [ 0, 'datemultilinegraph' ]
+	'datemultilinegraph' => [ 0, 'datemultilinegraph' ],
+	'datebarchart' => [ 0, 'datebarchart' ]
 ];

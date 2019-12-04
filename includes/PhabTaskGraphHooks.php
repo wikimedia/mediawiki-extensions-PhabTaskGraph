@@ -14,6 +14,8 @@ class PhabTaskGraphHooks {
 	public static function onParserFirstCallInit( &$parser ) {
 		$parser->setFunctionHook( 'datemultilinegraph',
 			[ self::class, 'drawDateMultiLineGraph' ] );
+		$parser->setFunctionHook( 'datebarchart',
+			[ self::class, 'drawDateBarChart' ] );
 	}
 
 	/**
@@ -23,51 +25,43 @@ class PhabTaskGraphHooks {
 	 * @return string HTML div for the graph
 	 */
 	public static function drawDateMultiLineGraph( Parser $parser ) {
-		$params = func_get_args();
-		array_shift( $params );
-		$args = [];
-		foreach ( $params as $param ) {
-			$split = explode( '=', $param, 2 );
-			if ( count( $split ) > 1 ) {
-				$args[$split[0]] = $split[1];
-			}
-		}
+		$params = self::parseParams( func_get_args() );
 
 		$output = $parser->getOutput();
 		$output->addModules( 'ext.PTG_DateMultiLineGraph' );
 
-		if ( isset( $args['width'] ) ) {
-			$width = $args['width'];
+		if ( isset( $params['width'] ) ) {
+			$width = $params['width'];
 		} else {
 			$width = 800;
 		}
 
-		if ( isset( $args['height'] ) ) {
-			$height = $args['height'];
+		if ( isset( $params['height'] ) ) {
+			$height = $params['height'];
 		} else {
 			$height = 400;
 		}
 
-		if ( isset( $args['xaxis'] ) ) {
-			$xaxis = $args['xaxis'];
+		if ( isset( $params['xaxis'] ) ) {
+			$xaxis = $params['xaxis'];
 		} else {
 			$xaxis = null;
 		}
 
-		if ( isset( $args['yaxis'] ) ) {
-			$yaxis = $args['yaxis'];
+		if ( isset( $params['yaxis'] ) ) {
+			$yaxis = $params['yaxis'];
 		} else {
 			$yaxis = null;
 		}
 
-		if ( isset( $args['delim'] ) ) {
-			$delim = $args['delim'];
+		if ( isset( $params['delim'] ) ) {
+			$delim = $params['delim'];
 		} else {
 			$delim = ',';
 		}
 
 		$rawdata = [];
-		$lines = explode( PHP_EOL, $args['data'] );
+		$lines = explode( PHP_EOL, $params['data'] );
 		foreach ( $lines as $line ) {
 			$line = trim( $line );
 			if ( strlen( $line ) > 0 ) {
@@ -112,5 +106,95 @@ class PhabTaskGraphHooks {
 				] );
 
 		return $html;
+	}
+
+	/**
+	 * Handle datebarchart parser function.
+	 * @since 2.0
+	 * @param Parser $parser the Parser object
+	 * @return string HTML div for the bar chart
+	 */
+	public static function drawDateBarChart( Parser $parser ) {
+		$params = self::parseParams( func_get_args() );
+
+		$output = $parser->getOutput();
+		$output->addModules( 'ext.PTG_DateBarChart' );
+
+		if ( isset( $params['width'] ) ) {
+			$width = $params['width'];
+		} else {
+			$width = 800;
+		}
+
+		if ( isset( $params['height'] ) ) {
+			$height = $params['height'];
+		} else {
+			$height = 400;
+		}
+
+		if ( isset( $params['xaxis'] ) ) {
+			$xaxis = $params['xaxis'];
+		} else {
+			$xaxis = null;
+		}
+
+		if ( isset( $params['yaxis'] ) ) {
+			$yaxis = $params['yaxis'];
+		} else {
+			$yaxis = null;
+		}
+
+		if ( isset( $params['delim'] ) ) {
+			$delim = $params['delim'];
+		} else {
+			$delim = ',';
+		}
+
+		$data = [];
+		$lines = explode( PHP_EOL, $params['data'] );
+		foreach ( $lines as $line ) {
+			$line = trim( $line );
+			if ( strlen( $line ) > 0 ) {
+				$items = array_map( 'trim', explode( $delim, $line, 2 ) );
+				if ( count( $items ) == 2 ) {
+					$date = date_create( $items[0] );
+					if ( $date ) {
+						$date = date_format( $date, 'Y-m-d' );
+						$value = intval( $items[1] );
+						$data[] = [ $date, $value ];
+					}
+				}
+			}
+		}
+
+		$graphName = 'PTG_DateBarChart_' . self::$graphNum;
+		$config = [
+			'id' => $graphName,
+			'width' => $width,
+			'height' => $height,
+			'xaxis' => $xaxis,
+			'yaxis' => $yaxis,
+			'data' => $data
+		];
+		$output->addJsConfigVars( 'PTG_DateBarChartConfig', $config );
+
+		$html = Html::element( 'div',
+				[
+					'id' => $graphName
+				] );
+
+		return $html;
+	}
+
+	private static function parseParams( $params ) {
+		array_shift( $params );
+		$paramArray = [];
+		foreach ( $params as $param ) {
+			$split = explode( '=', $param, 2 );
+			if ( count( $split ) > 1 ) {
+				$paramArray[$split[0]] = $split[1];
+			}
+		}
+		return $paramArray;
 	}
 }

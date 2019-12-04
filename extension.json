@@ -45,6 +45,12 @@
 				"d3.v5.min.js",
 				"PTG_DateMultiLineGraph.js"
 			]
+		},
+		"ext.PTG_DateBarChart": {
+			"scripts": [
+				"d3.v5.min.js",
+				"PTG_DateBarChart.js"
+			]
 		}
 	},
 	"Hooks": {
