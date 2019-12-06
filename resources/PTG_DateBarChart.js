@@ -3,9 +3,12 @@
 
 	return {
 		initialize: function () {
-			var chart = mw.config.get( 'PTG_DateBarChartConfig' );
-			this.showChart(chart.id, chart.data, chart.width, chart.height,
-				chart.xaxis, chart.yaxis);
+			var config = mw.config.get( 'PTG_DateBarChartConfig' );
+			var self = this;
+			config.forEach(function(chart) {
+				self.showChart(chart.id, chart.data, chart.width, chart.height,
+					chart.xaxis, chart.yaxis);
+			});
 		},
 		showChart: function (id, data, width, height, xaxis, yaxis) {
 			var margin = {top: 20, right: 20, bottom: 100, left: 50};

@@ -89,7 +89,7 @@ class PhabTaskGraphHooks {
 			];
 		}
 
-		$graphName = 'PTG_DateMultiLineGraph_' . self::$graphNum;
+		$graphName = 'PTG_DateMultiLineGraph_' . self::$graphNum++;
 		$config = [
 			'id' => $graphName,
 			'width' => $width,
@@ -98,7 +98,7 @@ class PhabTaskGraphHooks {
 			'yaxis' => $yaxis,
 			'data' => $data
 		];
-		$output->addJsConfigVars( 'PTG_DateMultiLineGraphConfig', $config );
+		self::addJsConfigVars( $output, 'PTG_DateMultiLineGraphConfig', $config );
 
 		$html = Html::element( 'div',
 				[
@@ -167,7 +167,7 @@ class PhabTaskGraphHooks {
 			}
 		}
 
-		$graphName = 'PTG_DateBarChart_' . self::$graphNum;
+		$graphName = 'PTG_DateBarChart_' . self::$graphNum++;
 		$config = [
 			'id' => $graphName,
 			'width' => $width,
@@ -176,7 +176,7 @@ class PhabTaskGraphHooks {
 			'yaxis' => $yaxis,
 			'data' => $data
 		];
-		$output->addJsConfigVars( 'PTG_DateBarChartConfig', $config );
+		self::addJsConfigVars( $output, 'PTG_DateBarChartConfig', $config );
 
 		$html = Html::element( 'div',
 				[
@@ -196,5 +196,15 @@ class PhabTaskGraphHooks {
 			}
 		}
 		return $paramArray;
+	}
+
+	private static function addJsConfigVars( $output, $key, $value ) {
+		$currentValue = $output->getJsConfigVars();
+		if ( array_key_exists( $key, $currentValue ) ) {
+			$currentValue[$key][] = $value;
+			$output->addJsConfigVars( $key, $currentValue[$key] );
+		} else {
+			$output->addJsConfigVars( $key, [ $value ] );
+		}
 	}
 }

@@ -3,9 +3,12 @@
 
 	return {
 		initialize: function () {
-			var graph = mw.config.get( 'PTG_DateMultiLineGraphConfig' );
-			this.showGraph(graph.id, graph.data, graph.width, graph.height,
+			var config = mw.config.get( 'PTG_DateMultiLineGraphConfig' );
+			var self = this;
+			config.forEach(function(graph) {
+				self.showGraph(graph.id, graph.data, graph.width, graph.height,
 				graph.xaxis, graph.yaxis);
+			});
 		},
 		showGraph: function (id, data, width, height, xaxis, yaxis) {
 			var margin = {top: 20, right: 20, bottom: 100, left: 50};
