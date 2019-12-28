@@ -21,7 +21,8 @@
 		]
 	},
 	"ExtensionMessagesFiles": {
-		"PhabTaskGraphAlias": "i18n/PhabTaskGraph.i18n.alias.php"
+		"PhabTaskGraphAlias": "i18n/PhabTaskGraph.i18n.alias.php",
+		"PhabTaskGraphMagic": "i18n/PhabTaskGraph.i18n.magic.php"
 	},
 	"ResourceModules": {
 		"ext.PhabTaskGraph": {
