@@ -49,7 +49,7 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 				if ( $task[0] === 'T' ) {
 					$taskarray[$i] = substr( $task, 1 );
 				}
-			};
+			}
 			$this->getTasks( $taskarray, $statusarray );
 		} else {
 			$taskarray = [];

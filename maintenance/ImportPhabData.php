@@ -147,7 +147,7 @@ class ImportPhabData extends Maintenance {
 					$title = $namespaceName . ':' . $title;
 				}
 				$title = Title::newFromText( $title );
-				if ( !is_null( $title ) ) {
+				if ( $title !== null ) {
 					$wikiTasks[$taskID] = $title;
 				}
 			}
@@ -248,7 +248,7 @@ class ImportPhabData extends Maintenance {
 			if ( $this->delay > 0 ) {
 				sleep( $this->delay );
 			}
-			if ( is_null( $after ) ) {
+			if ( $after === null ) {
 				$p = $params;
 			} else {
 				$a = [
@@ -262,7 +262,7 @@ class ImportPhabData extends Maintenance {
 				$allData[] = $data;
 			}
 			$after = $results['cursor']['after'];
-		} while ( !is_null( $after ) );
+		} while ( $after !== null );
 		return $allData;
 	}
 
@@ -402,7 +402,7 @@ class ImportPhabData extends Maintenance {
 				$data['transactionType'] === 'core:columns' ) {
 				if ( isset( $data['newValue'] ) && array_key_exists( 'columnPHID', $data['newValue'][0] ) &&
 					$data['newValue'][0]['columnPHID'] === $columnID ) {
-					if ( is_null( $latestDate ) || $latestDate < $data['dateCreated'] ) {
+					if ( $latestDate === null || $latestDate < $data['dateCreated'] ) {
 						$latestDate = $data['dateCreated'];
 					}
 				}
@@ -523,18 +523,18 @@ class ImportPhabData extends Maintenance {
 		$formattedTask .=
 			'|points=' . $task['points'] . PHP_EOL;
 		$formattedTask .= '|dateCreated=' . $task['dateCreated'] . PHP_EOL;
-		if ( !is_null( $task['dateModified'] ) ) {
+		if ( $task['dateModified'] !== null ) {
 			$formattedTask .= '|dateModified=' . $task['dateModified'] . PHP_EOL;
 		}
-		if ( !is_null( $task['dateClosed'] ) ) {
+		if ( $task['dateClosed'] !== null ) {
 			$formattedTask .= '|dateClosed=' . $task['dateClosed'] . PHP_EOL;
 		}
-		if ( !is_null( $task['author'] ) ) {
+		if ( $task['author'] !== null ) {
 			$formattedTask .=
 				'|author=' . $this->formatUser( 'author', $task['author'],
 				$userTemplateName ) . PHP_EOL;
 		}
-		if ( !is_null( $task['owner'] ) ) {
+		if ( $task['owner'] !== null ) {
 			$formattedTask .=
 				'|owner=' . $this->formatUser( 'owner', $task['owner'],
 				$userTemplateName ) . PHP_EOL;
@@ -585,7 +585,7 @@ class ImportPhabData extends Maintenance {
 		}
 		$formattedProject = '{{' . $projectTemplateName . PHP_EOL;
 		$formattedProject .= '|name=' . $this->fixName( $name ) . PHP_EOL;
-		if ( !is_null( $column ) ) {
+		if ( $column !== null ) {
 			$formattedProject .= '|column=' . $column . PHP_EOL;
 		}
 		$formattedProject .= '|entryDate=' . $project['entryDate'] . PHP_EOL;
