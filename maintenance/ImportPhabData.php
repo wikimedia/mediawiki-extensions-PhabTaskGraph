@@ -50,6 +50,7 @@ class ImportPhabData extends Maintenance {
 	private $delay = false;
 	private $phabTasks = [];
 	private $projects = [];
+	private $columns = [];
 	private $users = [];
 
 	public function __construct() {
@@ -67,6 +68,9 @@ class ImportPhabData extends Maintenance {
 			false );
 		$this->addArg( "user template",
 			"Template for Phabricator users (default: Phabricator User).",
+			false );
+		$this->addArg( "transition template",
+			"Template for column transitions (default: Transition).",
 			false );
 		$this->addOption( "verbose", "Verbose output",
 			false, false, 'v' );
@@ -104,6 +108,7 @@ class ImportPhabData extends Maintenance {
 		$taskTemplateName = $this->getArg( 3, 'Phabricator Task' );
 		$projectTemplateName = $this->getArg( 4, 'Phabricator Project' );
 		$userTemplateName = $this->getArg( 5, 'Phabricator User' );
+		$transitionTemplateName = $this->getArg( 6, 'Transition' );
 		if ( $this->verbose ) {
 			echo 'Project(s): ' . $projectNames . PHP_EOL;
 			echo 'Namespace: ';
@@ -175,6 +180,14 @@ class ImportPhabData extends Maintenance {
 			}
 		}
 
+		$columns = [];
+		foreach ( $this->columns as $columnPHID => $column ) {
+			if ( $column === true ) {
+				$columns[] = $columnPHID;
+			}
+		}
+		$this->getColumns( $columns );
+
 		if ( !$this->dry_run ) {
 			if ( $this->verbose ) {
 				echo PHP_EOL;
@@ -183,7 +196,7 @@ class ImportPhabData extends Maintenance {
 				if ( isset( $this->phabTasks[$taskID] ) ) {
 					$formattedTask = $this->formatTask( $taskID,
 						$this->phabTasks[$taskID], $taskTemplateName, $projectTemplateName,
-						$userTemplateName );
+						$userTemplateName, $transitionTemplateName );
 					$this->editTask( $title, $taskTemplateName, $formattedTask );
 				}
 			}
@@ -353,30 +366,83 @@ class ImportPhabData extends Maintenance {
 		} else {
 			$task['owner'] = null;
 		}
-		$task['projects'] = [];
 
 		$taskTransactionData = $this->getTaskTransactions( $taskID );
+		$task['transitions'] = [];
+		foreach ( $taskTransactionData as $transactionData ) {
+			if ( array_key_exists( 'transactionType', $transactionData ) &&
+				$transactionData['transactionType'] === 'core:columns' &&
+				isset( $transactionData['newValue'] ) &&
+				array_key_exists( 'columnPHID', $transactionData['newValue'][0] ) ) {
 
-		foreach ( $data['attachments']['projects']['projectPHIDs'] as $projphID ) {
+				// column entry
+				$transition = [];
+				$columnPHID = $transactionData['newValue'][0]['columnPHID'];
+				$transition['date'] = $transactionData['dateCreated'];
+				$transition['type'] = 'Entered Column';
+				$transition['item'] = $columnPHID;
+				$task['transitions'][] = $transition;
+				if ( !isset( $this->columns[$columPHID] ) ) {
+					$this->columns[$columnPHID] = true;
+				}
+
+				// column exit
+				foreach ( $transactionData['newValue'][0]['fromColumnPHIDs'] as $exitColumnPHID ) {
+					$transition = [];
+					$transition['date'] = $transactionData['dateCreated'];
+					$transition['type'] = 'Exited Column';
+					$transition['item'] = $exitColumnPHID;
+					$task['transitions'][] = $transition;
+					if ( !isset( $this->columns[$exitColumnPHID] ) ) {
+						$this->columns[$exitColumnPHID] = true;
+					}
+				}
+			} elseif ( array_key_exists( 'transactionType', $transactionData ) &&
+				$transactionData['transactionType'] === 'core:edge' ) {
+				foreach ( $transactionData['oldValue'] as $projectPHID ) {
+					if ( is_string( $projectPHID ) && substr( $projectPHID, 0, 9 ) === 'PHID-PROJ' ) {
+						$this->getProject( $projectPHID );
+						$transition = [];
+						$transition['date'] = $transactionData['dateCreated'];
+						$transition['type'] = 'Removed Project';
+						$transition['item'] = $this->projects[$projectPHID]['fullname'];
+						$task['transitions'][] = $transition;
+					}
+				}
+				foreach ( $transactionData['newValue'] as $projectPHID ) {
+					if ( is_string( $projectPHID ) && substr( $projectPHID, 0, 9 ) === 'PHID-PROJ' ) {
+						$this->getProject( $projectPHID );
+						$transition = [];
+						$transition['date'] = $transactionData['dateCreated'];
+						$transition['type'] = 'Added Project';
+						$transition['item'] = $this->projects[$projectPHID]['fullname'];
+						$task['transitions'][] = $transition;
+					}
+				}
+			}
+		}
+
+		$task['projects'] = [];
+		foreach ( $data['attachments']['projects']['projectPHIDs'] as $projectPHID ) {
 			$project = [];
 			$project['entryDate'] = $task['dateCreated'];
-			$this->getProject( $projphID );
-			if ( isset( $this->projects[$projphID] ) ) {
-				$project['name'] = $this->projects[$projphID]['name'];
-				if ( isset( $this->projects[$projphID]['parent-name'] ) ) {
-					$project['name'] = $this->projects[$projphID]['parent-name'] .
-						' (' . $project['name'] . ')';
-				}
+			$this->getProject( $projectPHID );
+			if ( isset( $this->projects[$projectPHID] ) ) {
+				$project['name'] = $this->projects[$projectPHID]['fullname'];
 				if ( array_key_exists( 'columns', $data['attachments'] ) &&
-					array_key_exists( $projphID,
+					array_key_exists( $projectPHID,
 					$data['attachments']['columns']['boards'] ) ) {
 					$project['column'] =
-						$data['attachments']['columns']['boards'][$projphID]['columns'][0]['name'];
-					$columnID = $data['attachments']['columns']['boards'][$projphID]['columns'][0]['phid'];
+						$data['attachments']['columns']['boards'][$projectPHID]['columns'][0]['name'];
+					$columnID = $data['attachments']['columns']['boards'][$projectPHID]['columns'][0]['phid'];
+					$this->columns[$columnID] = [
+						'project' => $project['name'],
+						'column' => $project['column']
+					];
 					$project['entryDate'] =
 						$this->parseColumnEntryDate( $taskTransactionData, $columnID, $task['dateCreated'] );
 				}
-				$task['projects'][$this->projects[$projphID]['name'] . $projphID] = $project;
+				$task['projects'][$this->projects[$projectPHID]['name'] . $projectPHID] = $project;
 			}
 		}
 		$task['fromProject'] = $fromProject;
@@ -393,6 +459,29 @@ class ImportPhabData extends Maintenance {
 		];
 		$resultData = $this->callOldAPI( 'maniphest.gettasktransactions', $params );
 		return $resultData[$taskID];
+	}
+
+	private function getColumns( $columnIDs ) {
+		$params = [
+			'constraints' => [
+				'phids' => $columnIDs
+			]
+		];
+		$resultData = $this->callAPI( 'project.column.search', $params );
+		foreach ( $resultData as $data ) {
+			$projectPHID = $data['fields']['project']['phid'];
+			if ( isset( $this->projects[$projectPHID] ) ) {
+				$this->columns[$data['phid']] = [
+					'project' => $this->projects[$projectPHID]['fullname'],
+					'column' => $data['fields']['name']
+				];
+			} else {
+				$this->columns[$data['phid']] = [
+					'project' => $data['fields']['project']['name'],
+					'column' => $data['fields']['name']
+				];
+			}
+		}
 	}
 
 	private function parseColumnEntryDate( $taskTransactionData, $columnID, $taskCreationDate ) {
@@ -434,14 +523,14 @@ class ImportPhabData extends Maintenance {
 		}
 	}
 
-	private function getProject( $projphID ) {
-		if ( isset( $this->projects[$projphID] ) ) {
+	private function getProject( $projectPHID ) {
+		if ( isset( $this->projects[$projectPHID] ) ) {
 			return;
 		}
 		$params = [
 			'constraints' => [
 				'phids' => [
-					$projphID
+					$projectPHID
 				],
 			]
 		];
@@ -452,8 +541,8 @@ class ImportPhabData extends Maintenance {
 	}
 
 	private function parseProject( $data ) {
-		$projphID = $data['phid'];
-		if ( isset( $this->projects[$projphID] ) ) {
+		$projectPHID = $data['phid'];
+		if ( isset( $this->projects[$projectPHID] ) ) {
 			return;
 		}
 		$project = [];
@@ -461,18 +550,22 @@ class ImportPhabData extends Maintenance {
 		$project['color'] = $data['fields']['color']['key'];
 		if ( isset( $data['fields']['parent']['name'] ) ) {
 			$project['parent-name'] = $data['fields']['parent']['name'];
+			$project['fullname'] = $project['parent-name'] .
+						' (' . $project['name'] . ')';
+		} else {
+			$project['fullname'] = $project['name'];
 		}
-		$this->projects[$projphID] = $project;
+		$this->projects[$projectPHID] = $project;
 	}
 
-	private function getUser( $userphID ) {
-		if ( isset( $this->users[$userphID] ) ) {
+	private function getUser( $userPHID ) {
+		if ( isset( $this->users[$userPHID] ) ) {
 			return;
 		}
 		$params = [
 			'constraints' => [
 				'phids' => [
-					$userphID
+					$userPHID
 				],
 			]
 		];
@@ -483,17 +576,17 @@ class ImportPhabData extends Maintenance {
 	}
 
 	private function parseUser( $data ) {
-		$userphID = $data['phid'];
-		if ( isset( $this->users[$userphID] ) ) {
+		$userPHID = $data['phid'];
+		if ( isset( $this->users[$userPHID] ) ) {
 			return;
 		}
 		$user = [];
 		$user['username'] = $data['fields']['username'];
 		$user['realName'] = $data['fields']['realName'];
-		$this->users[$userphID] = $user;
+		$this->users[$userPHID] = $user;
 	}
 
-  private function fixName( $name ) {
+	private function fixName( $name ) {
 		$old = [
 			'|',
 			'{',
@@ -509,10 +602,10 @@ class ImportPhabData extends Maintenance {
 			'&#93;'
 		];
 		return str_replace( $old, $new, $name );
-	 }
+	}
 
 	private function formatTask( $taskID, $task, $taskTemplateName,
-		$projectTemplateName, $userTemplateName ) {
+		$projectTemplateName, $userTemplateName, $transitionTemplateName ) {
 		$formattedTask = '{{' . $taskTemplateName . PHP_EOL;
 		$formattedTask .=
 			'|name=' . $this->fixName( $task['name'] ) . PHP_EOL;
@@ -553,6 +646,10 @@ class ImportPhabData extends Maintenance {
 			$formattedTask .=
 				'|subtasks=' . implode( ',', $task['subtasks'] ) . PHP_EOL;
 		}
+		if ( isset( $task['transitions'] ) && count( $task['transitions'] ) > 0 ) {
+			$formattedTask .= '|transitions=' .
+				$this->formatTransitions( $task['transitions'], $transitionTemplateName ) . PHP_EOL;
+		}
 		$formattedTask .= '}}' . PHP_EOL;
 		return $formattedTask;
 	}
@@ -567,6 +664,28 @@ class ImportPhabData extends Maintenance {
 			'|realName=' . $user['realName'] . PHP_EOL;
 		$formattedUser .= '}}';
 		return $formattedUser;
+	}
+
+	private function formatTransitions( $transitions, $transitionTemplateName ) {
+		$formattedTransitions = '';
+		foreach ( $transitions as $transition ) {
+			$formattedTransitions .= '{{' . $transitionTemplateName . PHP_EOL .
+				'|date=' . $transition['date'] . PHP_EOL .
+				'|type=' . $transition['type'] . PHP_EOL;
+			if ( $transition['type'] === 'Entered Column' ||
+				$transition['type'] === 'Exited Column' ) {
+				$column = $this->columns[$transition['item']];
+				$formattedTransitions .=
+					'|project=' . $column['project'] . PHP_EOL .
+					'|column=' . $column['column'] . PHP_EOL;
+			} elseif ( $transition['type'] === 'Added Project' ||
+				$transition['type'] === 'Removed Project' ) {
+				$formattedTransitions .=
+					'|project=' . $transition['item'] . PHP_EOL;
+			}
+			$formattedTransitions .= '}}';
+		}
+		return $formattedTransitions;
 	}
 
 	private function formatProject( $project, $projectTemplateName ) {
