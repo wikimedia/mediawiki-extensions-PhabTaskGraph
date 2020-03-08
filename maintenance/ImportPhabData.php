@@ -382,7 +382,7 @@ class ImportPhabData extends Maintenance {
 				$transition['type'] = 'Entered Column';
 				$transition['item'] = $columnPHID;
 				$task['transitions'][] = $transition;
-				if ( !isset( $this->columns[$columPHID] ) ) {
+				if ( !isset( $this->columns[$columnPHID] ) ) {
 					$this->columns[$columnPHID] = true;
 				}
 
