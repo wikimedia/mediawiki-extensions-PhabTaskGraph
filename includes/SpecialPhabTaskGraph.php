@@ -4,7 +4,7 @@ require_once __DIR__ . '/../arcanist/src/__phutil_library_init__.php';
 
 class SpecialPhabTaskGraph extends IncludableSpecialPage {
 
-	function __construct() {
+	public function __construct() {
 		parent::__construct( 'PhabTaskGraph' );
 	}
 
@@ -14,6 +14,9 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 	private $projects = [];
 	private $people = [];
 
+	/**
+	 * @param string|null $parser
+	 */
 	public function execute( $parser ) {
 		$request = $this->getRequest();
 		$output = $this->getOutput();

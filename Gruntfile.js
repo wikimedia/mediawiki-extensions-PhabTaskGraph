@@ -10,6 +10,7 @@ module.exports = function ( grunt ) {
 		jsonlint: {
 			all: [
 				'**/*.json',
+				'!arcanist/**',
 				'!node_modules/**',
 				'!vendor/**'
 			]

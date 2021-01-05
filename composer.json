@@ -7,17 +7,12 @@
 	},
 	"scripts": {
 		"test": [
-			"parallel-lint . --exclude vendor --exclude node_modules",
-			"minus-x check includes",
-			"minus-x check maintenance",
-			"phpcs -sp includes",
-			"phpcs -sp maintenance"
+			"parallel-lint . --exclude vendor --exclude node_modules --exclude arcanist",
+			"minus-x check .",
+			"phpcs -sp"
 		],
 		"fix": [
-			"minus-x fix includes",
-			"minus-x fix maintenance",
-			"phpcbf includes",
-			"phpcbf maintenance",
+			"minus-x fix .",
 			"phpcbf"
 		]
 	}
