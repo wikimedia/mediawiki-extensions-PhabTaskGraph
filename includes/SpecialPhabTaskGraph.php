@@ -257,8 +257,7 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 			if ( array_key_exists( 'columns', $data['attachments'] ) &&
 				array_key_exists( $projphID,
 				$data['attachments']['columns']['boards'] ) ) {
-				$column = ' (' . $data['attachments']['columns']['boards'][$projphID]
-					['columns'][0]['name'] . ')';
+				$column = ' (' . $data['attachments']['columns']['boards'][$projphID]['columns'][0]['name'] . ')';
 			} else {
 				$column = '';
 			}
