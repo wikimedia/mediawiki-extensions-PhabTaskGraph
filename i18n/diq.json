@@ -5,5 +5,6 @@
 		]
 	},
 	"phabtaskgraph-status-field-label": "Weziyet",
-	"phabtaskgraph-width-field-label": "Herayiye"
+	"phabtaskgraph-width-field-label": "Herayiye",
+	"phabtaskgraph-height-field-label": "Berziye"
 }
