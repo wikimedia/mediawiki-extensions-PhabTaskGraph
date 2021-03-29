@@ -2,15 +2,19 @@
 	"@metadata": {
 		"authors": [
 			"Hinaloe",
-			"Phantomize"
+			"Phantomize",
+			"Shirayuki"
 		]
 	},
 	"phabtaskgraph-author-field-label": "作者",
 	"phabtaskgraph-owner-field-label": "所有者",
 	"phabtaskgraph-tasks-field-label": "タスク",
 	"phabtaskgraph-projects-field-label": "プロジェクト",
+	"phabtaskgraph-status-field-label": "状態",
 	"phabtaskgraph-width-field-label": "幅",
 	"phabtaskgraph-height-field-label": "高さ",
+	"phabtaskgraph-width-field-help": "既定: 800",
+	"phabtaskgraph-height-field-help": "既定: 800",
 	"phabtaskgraph-status-open": "開く",
 	"phabtaskgraph-status-resolved": "解決済",
 	"phabtaskgraph-status-invalid": "無効",
