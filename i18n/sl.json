@@ -4,5 +4,6 @@
 			"Eleassar"
 		]
 	},
-	"phabtaskgraph-author-field-label": "Avtor"
+	"phabtaskgraph-author-field-label": "Avtor",
+	"phabtaskgraph-status-field-label": "Stanje"
 }
