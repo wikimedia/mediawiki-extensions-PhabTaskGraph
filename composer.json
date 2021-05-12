@@ -17,7 +17,8 @@
 			"minus-x fix includes",
 			"minus-x fix maintenance",
 			"phpcbf includes",
-			"phpcbf maintenance"
+			"phpcbf maintenance",
+			"phpcbf"
 		]
 	}
 }
