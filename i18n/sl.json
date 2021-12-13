@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"phabtaskgraph-author-field-label": "Avtor",
+	"phabtaskgraph-status-field-label": "Stanje"
+}

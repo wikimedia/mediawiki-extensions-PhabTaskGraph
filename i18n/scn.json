@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ajeje Brazorf"
+		]
+	},
+	"phabtaskgraph-author-field-label": "Auturi",
+	"phabtaskgraph-projects-field-label": "Pruggetti",
+	"phabtaskgraph-status-field-label": "Statu",
+	"phabtaskgraph-status-invalid": "Nun vàlidu"
+}
