@@ -1,6 +1,6 @@
 {
 	"require-dev": {
-		"mediawiki/mediawiki-codesniffer": "31.0.0",
+		"mediawiki/mediawiki-codesniffer": "38.0.0",
 		"mediawiki/minus-x": "1.1.0",
 		"php-parallel-lint/php-console-highlighter": "0.5.0",
 		"php-parallel-lint/php-parallel-lint": "1.2.0"
@@ -10,7 +10,7 @@
 			"parallel-lint . --exclude vendor --exclude node_modules",
 			"minus-x check includes",
 			"minus-x check maintenance",
-			"phpcs -sp includes",
+			"@phpcs",
 			"phpcs -sp maintenance"
 		],
 		"fix": [
@@ -19,6 +19,7 @@
 			"phpcbf includes",
 			"phpcbf maintenance",
 			"phpcbf"
-		]
+		],
+		"phpcs": "phpcs -sp includes"
 	}
 }
