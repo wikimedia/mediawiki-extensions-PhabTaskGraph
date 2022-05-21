@@ -742,7 +742,9 @@ class ImportPhabData extends Maintenance {
 		if ( $title->exists() ) {
 
 			$wikiPageContent = $wikiPage->getContent();
-			$articleText = $wikiPageContent->getNativeData();
+			/** @var TextContent $wikiPageContent */
+			'@phan-var TextContent $wikiPageContent';
+			$articleText = $wikiPageContent->getText();
 
 			$pos = strpos( $articleText, '{{' . $taskTemplateName . PHP_EOL );
 			if ( $pos !== false ) {
