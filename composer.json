@@ -11,7 +11,7 @@
 			"minus-x check includes",
 			"minus-x check maintenance",
 			"@phpcs",
-			"phpcs -sp maintenance"
+			"@phpcs"
 		],
 		"fix": [
 			"minus-x fix includes",
