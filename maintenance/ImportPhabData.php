@@ -238,8 +238,15 @@ class ImportPhabData extends Maintenance {
 					$edit_summary = 'updated info from Phabricator';
 					$flags = EDIT_MINOR;
 					$new_content = new WikitextContent( $info );
-					$wikiPage->doEditContent( $new_content, $edit_summary, $flags, false,
-						User::newSystemUser( 'Maintenance script' ) );
+					$editor = User::newSystemUser( 'Maintenance script' );
+					if ( method_exists( $wikiPage, 'doUserEditContent' ) ) {
+						// MW 1.36+
+						$wikiPage->doUserEditContent( $new_content, $editor,
+							$edit_summary, $flags );
+					} else {
+						$wikiPage->doEditContent( $new_content, $edit_summary, $flags, false,
+							$editor );
+					}
 				} else {
 					echo 'Invalid page title: ' . $this->save_info . PHP_EOL;
 				}
@@ -736,8 +743,14 @@ class ImportPhabData extends Maintenance {
 		$edit_summary = 'updated task from Phabricator';
 		$flags = EDIT_MINOR;
 		$new_content = new WikitextContent( $articleText );
-		$wikiPage->doEditContent( $new_content, $edit_summary, $flags, false,
-			User::newSystemUser( 'Maintenance script' ) );
+		$editor = User::newSystemUser( 'Maintenance script' );
+		if ( method_exists( $wikiPage, 'doUserEditContent' ) ) {
+			// MW 1.36+
+			$wikiPage->doUserEditContent( $new_content, $editor, $edit_summary, $flags );
+		} else {
+			$wikiPage->doEditContent( $new_content, $edit_summary, $flags, false,
+				$editor );
+		}
 	}
 }
 
