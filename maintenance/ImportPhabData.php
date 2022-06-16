@@ -754,5 +754,5 @@ class ImportPhabData extends Maintenance {
 	}
 }
 
-$maintClass = "ImportPhabData";
+$maintClass = ImportPhabData::class;
 require_once RUN_MAINTENANCE_IF_MAIN;
