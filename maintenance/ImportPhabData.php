@@ -30,6 +30,8 @@ if ( !is_readable( "$IP/maintenance/Maintenance.php" ) ) {
 }
 require_once "$IP/maintenance/Maintenance.php";
 
+use MediaWiki\MediaWikiServices;
+
 /**
  * Maintenance script that imports data from Phabricator into a wiki
  *
@@ -234,7 +236,12 @@ class ImportPhabData extends Maintenance {
 			if ( $this->save_info && !$this->dry_run ) {
 				$title = Title::newFromText( $this->save_info );
 				if ( $title ) {
-					$wikiPage = new WikiPage( $title );
+					if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
+						// MW 1.36+
+						$wikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
+					} else {
+						$wikiPage = new WikiPage( $title );
+					}
 					$edit_summary = 'updated info from Phabricator';
 					$flags = EDIT_MINOR;
 					$new_content = new WikitextContent( $info );
@@ -724,7 +731,12 @@ class ImportPhabData extends Maintenance {
 			echo $title->getPrefixedText() . ' is not a wikitext page.' . PHP_EOL;
 			return;
 		}
-		$wikiPage = new WikiPage( $title );
+		if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
+			// MW 1.36+
+			$wikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
+		} else {
+			$wikiPage = new WikiPage( $title );
+		}
 		$articleText = '';
 
 		if ( $title->exists() ) {
