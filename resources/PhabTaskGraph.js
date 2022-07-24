@@ -1,4 +1,4 @@
-﻿var phabtaskgraph_controller = ( function ( mw, $ ) {
+var phabtaskgraph_controller = ( function ( mw, $ ) {
 	'use strict';
 
 	return {

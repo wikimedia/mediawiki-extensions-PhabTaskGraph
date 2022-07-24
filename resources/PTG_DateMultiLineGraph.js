@@ -1,4 +1,4 @@
-﻿var ptg_datemultilinegraph_controller = ( function ( mw, $ ) {
+var ptg_datemultilinegraph_controller = ( function ( mw, $ ) {
 	'use strict';
 
 	return {

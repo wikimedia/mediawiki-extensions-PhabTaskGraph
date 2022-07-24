@@ -1,4 +1,4 @@
-﻿var ptg_datebarchart_controller = ( function ( mw, $ ) {
+var ptg_datebarchart_controller = ( function ( mw, $ ) {
 	'use strict';
 
 	return {
