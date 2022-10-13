@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"phabtaskgraph": "Graphico de cargas de Phabricator",
+	"phabtaskgraph-desc": "Visualisa le relationes inter cargas sur Phabricator in un graphico orientate",
+	"phabtaskgraph-author-field-label": "Autor",
+	"phabtaskgraph-owner-field-label": "Proprietario",
+	"phabtaskgraph-tasks-field-label": "Cargas",
+	"phabtaskgraph-projects-field-label": "Projectos",
+	"phabtaskgraph-status-field-label": "Stato",
+	"phabtaskgraph-width-field-label": "Latitude",
+	"phabtaskgraph-height-field-label": "Altitude",
+	"phabtaskgraph-tasks-field-help": "lista de valores de ID de carga separate per commas (le \"T\" initial es optional); p.ex. 'T123456, T654321'",
+	"phabtaskgraph-projects-field-help": "lista de nomines de projecto separate per commas; p.ex. 'MediaWiki-Platform-Team, Epic'",
+	"phabtaskgraph-width-field-help": "predefinite: 800",
+	"phabtaskgraph-height-field-help": "predefinite: 800",
+	"phabtaskgraph-status-open": "Aperte",
+	"phabtaskgraph-status-stalled": "Paralysate",
+	"phabtaskgraph-status-resolved": "Resolvite",
+	"phabtaskgraph-status-invalid": "Invalide",
+	"phabtaskgraph-status-declined": "Declinate",
+	"phabtaskgraph-status-duplicate": "Duplicato"
+}
