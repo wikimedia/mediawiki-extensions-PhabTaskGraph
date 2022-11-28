@@ -6,5 +6,6 @@
 	},
 	"phabtaskgraph-author-field-label": "Avtor",
 	"phabtaskgraph-projects-field-label": "Projekti",
-	"phabtaskgraph-status-field-label": "Stanje"
+	"phabtaskgraph-status-field-label": "Stanje",
+	"phabtaskgraph-status-invalid": "Neveljavno"
 }
