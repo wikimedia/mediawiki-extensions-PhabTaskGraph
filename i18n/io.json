@@ -6,5 +6,7 @@
 	},
 	"phabtaskgraph-author-field-label": "Autoro",
 	"phabtaskgraph-projects-field-label": "Projeti",
-	"phabtaskgraph-status-field-label": "Stando"
+	"phabtaskgraph-status-field-label": "Stando",
+	"phabtaskgraph-width-field-label": "Larjeso",
+	"phabtaskgraph-height-field-label": "Altajo"
 }
