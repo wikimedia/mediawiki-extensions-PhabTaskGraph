@@ -4,8 +4,23 @@
 			"Eleassar"
 		]
 	},
+	"phabtaskgraph": "Grafikon opravil Phabricator",
+	"phabtaskgraph-desc": "Prikaže razmerja med nalogami Fabrikatorja v silno usmerjenem grafu",
 	"phabtaskgraph-author-field-label": "Avtor",
+	"phabtaskgraph-owner-field-label": "Lastnik",
+	"phabtaskgraph-tasks-field-label": "Naloge",
 	"phabtaskgraph-projects-field-label": "Projekti",
 	"phabtaskgraph-status-field-label": "Stanje",
-	"phabtaskgraph-status-invalid": "Neveljavno"
+	"phabtaskgraph-width-field-label": "Širina",
+	"phabtaskgraph-height-field-label": "Višina",
+	"phabtaskgraph-tasks-field-help": "z vejicami ločen seznam ID-jev nalog (začetek s »T« je neobvezen); npr. »T123456, T654321«",
+	"phabtaskgraph-projects-field-help": "z vejicami ločen seznam imen projektov; npr. »MediaWiki-Platform-Team, Epic«",
+	"phabtaskgraph-width-field-help": "privzeto: 800",
+	"phabtaskgraph-height-field-help": "privzeto: 800",
+	"phabtaskgraph-status-open": "Odpri",
+	"phabtaskgraph-status-stalled": "Zastalo",
+	"phabtaskgraph-status-resolved": "Razrešeno",
+	"phabtaskgraph-status-invalid": "Neveljavno",
+	"phabtaskgraph-status-declined": "Zavrnjeno",
+	"phabtaskgraph-status-duplicate": "Podvojitev"
 }
