@@ -1,10 +1,17 @@
 {
 	"@metadata": {
 		"authors": [
-			"Nike"
+			"Nike",
+			"Pyscowicz"
 		]
 	},
 	"phabtaskgraph-author-field-label": "Tekijä",
+	"phabtaskgraph-owner-field-label": "Omistaja",
+	"phabtaskgraph-tasks-field-label": "Tehtävät",
+	"phabtaskgraph-projects-field-label": "Projektit",
+	"phabtaskgraph-status-field-label": "Tila",
+	"phabtaskgraph-width-field-label": "Leveys",
+	"phabtaskgraph-height-field-label": "Korkeus",
 	"phabtaskgraph-status-resolved": "Ratkaistu",
 	"phabtaskgraph-status-invalid": "Virheellinen",
 	"phabtaskgraph-status-declined": "Hylätty",
