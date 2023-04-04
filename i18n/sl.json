@@ -13,7 +13,7 @@
 	"phabtaskgraph-status-field-label": "Stanje",
 	"phabtaskgraph-width-field-label": "Širina",
 	"phabtaskgraph-height-field-label": "Višina",
-	"phabtaskgraph-tasks-field-help": "z vejicami ločen seznam ID-jev nalog (začetek s »T« je neobvezen); npr. »T123456, T654321«",
+	"phabtaskgraph-tasks-field-help": "seznam z vejicami ločenih ID-jev opravil (začetek s »T« je neobvezen); npr. »T123456, T654321«",
 	"phabtaskgraph-projects-field-help": "z vejicami ločen seznam imen projektov; npr. »MediaWiki-Platform-Team, Epic«",
 	"phabtaskgraph-width-field-help": "privzeto: 800",
 	"phabtaskgraph-height-field-help": "privzeto: 800",
