@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Amire80"
+		]
+	},
+	"phabtaskgraph-width-field-help": "ברירת מחדל: 800",
+	"phabtaskgraph-height-field-help": "ברירת מחדל: 800",
+	"phabtaskgraph-status-open": "פתוחה",
+	"phabtaskgraph-status-stalled": "תקועה",
+	"phabtaskgraph-status-resolved": "פתורה",
+	"phabtaskgraph-status-invalid": "בלתי־תקינה",
+	"phabtaskgraph-status-declined": "נדחתה",
+	"phabtaskgraph-status-duplicate": "כפולה"
+}
