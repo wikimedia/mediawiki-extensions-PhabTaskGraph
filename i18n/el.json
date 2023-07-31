@@ -5,7 +5,6 @@
 			"Nikosgranturismogt"
 		]
 	},
-	"phabtaskgraph": "Phabricator Task Graph",
 	"phabtaskgraph-desc": "Οπτικοποιεί σχέσεις εργασιών του Phabricator σε ένα κατευθυνόμενο γράφημα δύναμης",
 	"phabtaskgraph-author-field-label": "Συγγραφέας",
 	"phabtaskgraph-owner-field-label": "Ιδιοκτήτης",
