@@ -4,6 +4,16 @@
 			"Amire80"
 		]
 	},
+	"phabtaskgraph-desc": "הצגת יחסי משימות פבריקטור בגרף מכוון כוח",
+	"phabtaskgraph-author-field-label": "יוצר",
+	"phabtaskgraph-owner-field-label": "בעלים",
+	"phabtaskgraph-tasks-field-label": "משימות",
+	"phabtaskgraph-projects-field-label": "פרויקטים",
+	"phabtaskgraph-status-field-label": "מצב",
+	"phabtaskgraph-width-field-label": "רוחב",
+	"phabtaskgraph-height-field-label": "גובה",
+	"phabtaskgraph-tasks-field-help": "רשימה מופרדת בפסיקים של מזהי משימות (לא חובה לכתוב \"T\" בהתחלה); למשל: \"T123456, T654321\"",
+	"phabtaskgraph-projects-field-help": "רשימה מופרדת בפסיקים של שמות פרויקטים; למשל 'MediaWiki-Platform-Team, Epic'",
 	"phabtaskgraph-width-field-help": "ברירת מחדל: 800",
 	"phabtaskgraph-height-field-help": "ברירת מחדל: 800",
 	"phabtaskgraph-status-open": "פתוחה",
