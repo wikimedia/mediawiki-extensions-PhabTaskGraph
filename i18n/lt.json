@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nokeoo"
+		]
+	},
+	"phabtaskgraph-author-field-label": "Autorius",
+	"phabtaskgraph-owner-field-label": "Savininkas",
+	"phabtaskgraph-tasks-field-label": "Užduotys",
+	"phabtaskgraph-projects-field-label": "Projektai",
+	"phabtaskgraph-status-field-label": "Būsena",
+	"phabtaskgraph-width-field-label": "Plotis",
+	"phabtaskgraph-height-field-label": "Aukštis",
+	"phabtaskgraph-tasks-field-help": "kableliais atskirtas užduočių ID sąrašas (pradėti su „T“ nebūtina); pvz., „T123456, T654321“",
+	"phabtaskgraph-projects-field-help": "kableliais atskirtas projektų pavadinimų sąrašas; pvz., „MediaWiki-Platform-Team, Epic“",
+	"phabtaskgraph-width-field-help": "numatytasis: 800",
+	"phabtaskgraph-height-field-help": "numatytasis: 800",
+	"phabtaskgraph-status-open": "Atidarytas",
+	"phabtaskgraph-status-stalled": "Sustojęs",
+	"phabtaskgraph-status-resolved": "Išspręstas",
+	"phabtaskgraph-status-invalid": "Negalimas",
+	"phabtaskgraph-status-declined": "Atmestas",
+	"phabtaskgraph-status-duplicate": "Dublikatas"
+}
