@@ -2,16 +2,17 @@
 	"@metadata": {
 		"authors": [
 			"Ансар",
+			"З. ӘЙЛЕ",
 			"Ләйсән"
 		]
 	},
-	"phabtaskgraph-author-field-label": "автор",
-	"phabtaskgraph-owner-field-label": "Эйә",
+	"phabtaskgraph-author-field-label": "Автор",
+	"phabtaskgraph-owner-field-label": "Хужаһы",
 	"phabtaskgraph-projects-field-label": "Проекттар",
 	"phabtaskgraph-status-field-label": "Торошо",
-	"phabtaskgraph-width-field-label": "Киңлек",
-	"phabtaskgraph-height-field-label": "Бейеклек",
+	"phabtaskgraph-width-field-label": "Киңлеге",
+	"phabtaskgraph-height-field-label": "Бейеклеге",
 	"phabtaskgraph-status-open": "Асыҡ",
 	"phabtaskgraph-status-invalid": "Яраҡһыҙ",
-	"phabtaskgraph-status-duplicate": "ҡабатлау"
+	"phabtaskgraph-status-duplicate": "Күсермә"
 }
