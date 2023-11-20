@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Mainframe98",
+			"McDutchie",
 			"Optilete"
 		]
 	},
 	"phabtaskgraph": "Phabricator Taakgrafieken",
+	"phabtaskgraph-desc": "Visualiseert Phabricator-taakrelaties in een krachtgerichte grafiek",
 	"phabtaskgraph-author-field-label": "Auteur",
 	"phabtaskgraph-owner-field-label": "Eigenaar",
 	"phabtaskgraph-tasks-field-label": "Taken",
@@ -18,6 +20,7 @@
 	"phabtaskgraph-width-field-help": "standaard: 800",
 	"phabtaskgraph-height-field-help": "standaard: 800",
 	"phabtaskgraph-status-open": "Open",
+	"phabtaskgraph-status-stalled": "Vastgelopen",
 	"phabtaskgraph-status-resolved": "Opgelost",
 	"phabtaskgraph-status-invalid": "Ongeldig",
 	"phabtaskgraph-status-declined": "Afgewezen",
