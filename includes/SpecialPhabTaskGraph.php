@@ -127,14 +127,14 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 				'tasksfield' => [
 					'label-message' => 'phabtaskgraph-tasks-field-label',
 					'help-message' => 'phabtaskgraph-tasks-field-help',
-					'class' => 'HTMLTextField',
+					'class' => HTMLTextField::class,
 					'default' => $tasks,
 					'name' => 'tasks'
 				],
 				'projectsfield' => [
 					'label-message' => 'phabtaskgraph-projects-field-label',
 					'help-message' => 'phabtaskgraph-projects-field-help',
-					'class' => 'HTMLTextField',
+					'class' => HTMLTextField::class,
 					'default' => $projects,
 					'name' => 'projects'
 				],
@@ -155,14 +155,14 @@ class SpecialPhabTaskGraph extends IncludableSpecialPage {
 				'widthfield' => [
 					'label-message' => 'phabtaskgraph-width-field-label',
 					'help-message' => 'phabtaskgraph-width-field-help',
-					'class' => 'HTMLTextField',
+					'class' => HTMLTextField::class,
 					'default' => $width,
 					'name' => 'width'
 				],
 				'heightfield' => [
 					'label-message' => 'phabtaskgraph-height-field-label',
 					'help-message' => 'phabtaskgraph-height-field-help',
-					'class' => 'HTMLTextField',
+					'class' => HTMLTextField::class,
 					'default' => $height,
 					'name' => 'height'
 				]
