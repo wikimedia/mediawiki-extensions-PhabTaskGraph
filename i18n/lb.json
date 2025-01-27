@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Robby"
+			"Robby",
+			"Volvox"
 		]
 	},
 	"phabtaskgraph-author-field-label": "Auteur",
@@ -15,6 +16,6 @@
 	"phabtaskgraph-height-field-help": "Standard: 800",
 	"phabtaskgraph-status-open": "Opmaachen",
 	"phabtaskgraph-status-resolved": "Geléist",
-	"phabtaskgraph-status-invalid": "Net valabel",
+	"phabtaskgraph-status-invalid": "Ongülteg",
 	"phabtaskgraph-status-duplicate": "Eng Kopie maachen"
 }
