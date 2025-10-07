@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Banjo",
-			"Elisardojm"
+			"Elisardojm",
+			"Toliño"
 		]
 	},
-	"phabtaskgraph": "Gráfico de tarefas de Phabricator",
+	"phabtaskgraph": "Grafo de tarefas de Phabricator",
+	"phabtaskgraph-desc": "Visualiza as relacións entre tarefas de Phabricator nun grafo orientado",
 	"phabtaskgraph-author-field-label": "Autor",
 	"phabtaskgraph-owner-field-label": "Propietario",
 	"phabtaskgraph-tasks-field-label": "Tarefas",
@@ -13,6 +15,8 @@
 	"phabtaskgraph-status-field-label": "Estado",
 	"phabtaskgraph-width-field-label": "Ancho",
 	"phabtaskgraph-height-field-label": "Alto",
+	"phabtaskgraph-tasks-field-help": "lista de identificadores de tarefas separados por comas (o «T» inicial é opcional); por exemplo, «T123456, T654321»",
+	"phabtaskgraph-projects-field-help": "lista de nomes de proxectos separados por comas; por exemplo, «MediaWiki-Platform-Team, Epic»",
 	"phabtaskgraph-width-field-help": "predefinido: 800",
 	"phabtaskgraph-height-field-help": "predefinido: 800",
 	"phabtaskgraph-status-open": "Aberta",
