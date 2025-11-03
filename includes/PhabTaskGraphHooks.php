@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Html\Html;
+
 class PhabTaskGraphHooks {
 
 	private static $graphNum = 0;

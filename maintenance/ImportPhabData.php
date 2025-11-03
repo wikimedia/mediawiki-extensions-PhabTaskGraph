@@ -30,7 +30,9 @@ if ( !is_readable( "$IP/maintenance/Maintenance.php" ) ) {
 }
 require_once "$IP/maintenance/Maintenance.php";
 
+use MediaWiki\Category\Category;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Title\Title;
 
 /**
  * Maintenance script that imports data from Phabricator into a wiki

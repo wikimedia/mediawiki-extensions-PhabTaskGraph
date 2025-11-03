@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Html\Html;
+
 require_once __DIR__ . '/../arcanist/src/__phutil_library_init__.php';
 
 class SpecialPhabTaskGraph extends IncludableSpecialPage {
