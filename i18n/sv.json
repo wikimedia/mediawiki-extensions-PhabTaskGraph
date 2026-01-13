@@ -2,9 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"Bengtsson96",
+			"Stefan2255",
 			"WikiPhoenix"
 		]
 	},
+	"phabtaskgraph-desc": "Visualiserar phabricator-uppgiftsrelationer i en kraftstyrd graf",
 	"phabtaskgraph-author-field-label": "Författare",
 	"phabtaskgraph-owner-field-label": "Ägare",
 	"phabtaskgraph-tasks-field-label": "Uppgifter",
