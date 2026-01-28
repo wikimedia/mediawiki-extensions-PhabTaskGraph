@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cabal"
+		]
+	},
+	"phabtaskgraph-author-field-label": "ਲਿਖਾਰੀ",
+	"phabtaskgraph-owner-field-label": "ਮਾਲਕ",
+	"phabtaskgraph-tasks-field-label": "ਕਾਰਜ",
+	"phabtaskgraph-width-field-label": "ਚੌੜਾਈ",
+	"phabtaskgraph-height-field-label": "ਉਚਾਈ",
+	"phabtaskgraph-status-open": "ਖੁੱਲ੍ਹਾ",
+	"phabtaskgraph-status-resolved": "ਹੱਲ-ਕੱਢਿਆ ਗਿਆ",
+	"phabtaskgraph-status-invalid": "ਗਲਤ"
+}
