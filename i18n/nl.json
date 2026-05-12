@@ -3,7 +3,8 @@
 		"authors": [
 			"Mainframe98",
 			"McDutchie",
-			"Optilete"
+			"Optilete",
+			"Siebrand"
 		]
 	},
 	"phabtaskgraph": "Phabricator Taakgrafieken",
@@ -22,7 +23,7 @@
 	"phabtaskgraph-status-open": "Open",
 	"phabtaskgraph-status-stalled": "Vastgelopen",
 	"phabtaskgraph-status-resolved": "Opgelost",
-	"phabtaskgraph-status-invalid": "Ongeldig",
+	"phabtaskgraph-status-invalid": "Onjuist",
 	"phabtaskgraph-status-declined": "Afgewezen",
 	"phabtaskgraph-status-duplicate": "Duplicaat"
 }
