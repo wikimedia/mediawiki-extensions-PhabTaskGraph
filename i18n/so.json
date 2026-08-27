@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"AhmedG612"
+		]
+	},
+	"phabtaskgraph-desc": "Ku muuji xidhiidhada hawlaha Phabricator garaaf xoog ku hagaya",
+	"phabtaskgraph-author-field-label": "Qoraa",
+	"phabtaskgraph-owner-field-label": "Mulkiilaha",
+	"phabtaskgraph-tasks-field-label": "Hawlaha",
+	"phabtaskgraph-projects-field-label": "Mashruucyo",
+	"phabtaskgraph-status-field-label": "Xaaladda",
+	"phabtaskgraph-width-field-label": "Ballaca",
+	"phabtaskgraph-height-field-label": "Dhererka",
+	"phabtaskgraph-tasks-field-help": "Liis aqoonsiyada hawlaha oo comma lagu kala saaray (ku bilaabashada \"T\" waa ikhtiyaari); tusaale ahaan, 'T123456, T654321'",
+	"phabtaskgraph-projects-field-help": "Liis magacyada mashaariicda oo comma lagu kala saaray; tusaale ahaan, 'MediaWiki-Platform-Team, Epic'",
+	"phabtaskgraph-width-field-help": "caadiga ah: 800",
+	"phabtaskgraph-height-field-help": "caadiga ah: 800",
+	"phabtaskgraph-status-open": "Fur",
+	"phabtaskgraph-status-stalled": "Hakaday",
+	"phabtaskgraph-status-resolved": "La xaliyay",
+	"phabtaskgraph-status-invalid": "Aan sax ahayn",
+	"phabtaskgraph-status-declined": "La diiday",
+	"phabtaskgraph-status-duplicate": "Nuqul"
+}
