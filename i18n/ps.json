@@ -1,0 +1,23 @@
+{
+	"@metadata": {
+		"authors": [
+			"شاه زمان پټان"
+		]
+	},
+	"phabtaskgraph": "د فابريکيټر کاردندو گراپ",
+	"phabtaskgraph-author-field-label": "ليکوال",
+	"phabtaskgraph-owner-field-label": "څښتن",
+	"phabtaskgraph-tasks-field-label": "کاردندې",
+	"phabtaskgraph-projects-field-label": "پروژې",
+	"phabtaskgraph-status-field-label": "دريځ",
+	"phabtaskgraph-width-field-label": "پراخوالی",
+	"phabtaskgraph-height-field-label": "لوړوالی",
+	"phabtaskgraph-width-field-help": "تلواليز: ۸۰۰",
+	"phabtaskgraph-height-field-help": "تلواليز: ۸۰۰",
+	"phabtaskgraph-status-open": "پرانېستی",
+	"phabtaskgraph-status-stalled": "ځنډول‌شوی",
+	"phabtaskgraph-status-resolved": "اوار‌شوی",
+	"phabtaskgraph-status-invalid": "ناچله",
+	"phabtaskgraph-status-declined": "ناگاره‌شوی",
+	"phabtaskgraph-status-duplicate": "دوه‌گونی"
+}
